@@ -1,0 +1,316 @@
+{% include 'dashboard/layout/header.html' %}
+<div class="ui container-fluid">
+    <h2 class="p-3"> Dashboard </h2>
+</div>
+<div class="main-panel container-fluid">
+    <div class="content-wrapper">
+      <div class="row grid-margin">
+        <div class="col-12"> 
+          <div class="card card-statistics bg-dark" style="background-color: rgb(62, 62, 195);">
+            <div class="card-body text-white">
+              <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
+                <div class="statistics-item">
+                    <i class="icon-sm fa fa-briefcase mr-2" aria-hidden="true"></i>
+                    Added Businesses 
+                  </p>
+                  <h2> {{ stats['total_biz'] }} Registered </h2>
+                  <a href="/business/add" class="btn btn-outline-white text-white"> Add Business </a>
+                </div>
+                <div class="statistics-item">
+                  <p>
+                    <i class="icon-sm fas fa-cloud-download-alt mr-2"></i>
+                    Installed Services 
+                  </p>
+                  <h2> {{ stats['installed'] }} Installed </h2>
+                  <a href="/service" class="btn btn-outline-white text-white"> Add Service </a>
+                </div>
+                <div class="statistics-item">
+                  <p>
+                      <i class="icon-sm fas fa-money-bill mr-2"></i>
+                    Pending Orders 
+                  </p>
+                  <h2> {{ stats['pending'] }} Orders </h2>
+                  <a href="/bills" class="btn btn-outline-white text-white"> Clear Orders </a>
+                </div>
+                <div class="statistics-item">
+                  <p>
+                    <i class="icon-sm fas fa-check-circle mr-2"></i>
+                    Earned from Affiliates
+                  </p>
+                  <h2> {{ earned }} {{ session['Currency'] }} </h2>
+                  <a href="/profile/affiliate" class="btn btn-outline-white text-white"> Earn More </a>
+                </div>
+                <div class="statistics-item">
+                  <p>
+                    <i class="icon-sm fas fa-chart-line mr-2"></i>
+                    Affiliate Balance 
+                  </p>
+                  <h2> {{ left }} {{ session['Currency'] }} </h2>
+                  <a href="/profile/affiliate" class="btn btn-outline-white text-white"> Withdraw </a>
+                </div>
+                <div class="statistics-item">
+                  <p>
+                    <i class="icon-sm fas fa-circle-notch mr-2"></i>
+                    Total Withdrawn
+                  </p>
+                  <h2> {{ withdrawn }} {{ session['Currency'] }} </h2>
+                  <a href="/profile/affiliate" class="btn btn-outline-white text-white"> Stats </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+<hr>
+<div class="row">
+    <div class="col-md-8 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body d-flex flex-column">
+          <h4 class="card-title">
+              <i class="fa fa-cloud-download" aria-hidden="true"></i>
+            Installed Services
+          </h4>
+          <div class="flex-grow-1 d-flex flex-column justify-content-between">
+            {% if not services %}
+                <div class="jumbotron bg-light text-center">
+                    <h1 class="display-3"> <i class="fas fa-sad-cry fa-2x"></i> </h1>
+                    <p class="lead"> You have No Active services </p>
+                    <hr class="my-2">
+                    <p class="lead">
+                        <a href="/service" class="ui btn btn-lg bg-primary text-white"> <i class="fa fa-plus" aria-hidden="true"></i> Add Services </a>
+                    </p>
+                </div>
+            {% else %}
+                <div class="ui container">
+                    <strong>
+                        Recently Added
+                    </strong>
+                </div>
+                <hr>
+                <div class="ui container-fluid">
+                    {% for r in services %}
+                        <div class="ui card bg-light shadow" href="/{{r['config_file']}}?sub_id={{ set_token(r['id']) }}">
+                            <div class="content">
+                                <div class="header"> {{ r['Title'] }} </div>
+                                <div class="meta">
+                                <a> <span class="cinema"> {{ r['Subtitle'] }} </span> </a>
+                                </div>
+                                <div class="description">
+                                    <p> {{ r['Comment'] }} </p>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <span class="right floated">
+                                        <a href="/{{r['config_file']}}?sub_id={{ set_token(r['id']) }}" class="ui primary button text-white"> <i class="fa fa-eye" aria-hidden="true"></i> View </a>
+                                </span>
+                                <span>
+                                <i class="tag icon"></i>
+                                <div class="ui label">{{ r['Category']}}</div>
+                                </span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">
+              <i class="icon-sm fas fa-cloud-download-alt mr-2"></i>
+              Notifications
+            </h4>
+            {% for each in alertz %}
+              <div class="ui feed">
+                  {% if each['Status'] == 0 %}
+                      <div class="event">
+                          <div class="label">
+                              <i class="text-primary bell icon"></i>
+                          </div>
+                          <div class="content">
+                          <div class="text-primary date">
+                              {{ each['Date'] }}
+                          </div>
+                          <div class="summary">
+                              <a href="/alert/view/{{set_token(each['id'])}}" class="text-primary"> {{ each['Kind'] }} on <strong> {{ each['Title'] }} </strong> for <strong> {{ each['Name'] }} </strong>  </a> </td>
+                          </div>
+                          </div>
+                      </div>
+                  {% else %}
+                      <div class="event">
+                          <div class="label">
+                              <i class="text-dark bell icon"></i>
+                          </div>
+                          <div class="content">
+                          <div class="text-dark date">
+                              {{ each['Date'] }}
+                          </div>
+                          <div class="summary">
+                              <a href="/alert/view/{{set_token(each['id'])}}" class="text-dark"> {{ each['Kind'] }} on <strong> {{ each['Title'] }} </strong> for <strong> {{ each['Name'] }} </strong>  </a> </td>
+                          </div>
+                          </div>
+                      </div>
+                  {% endif %}
+              </div>
+          {% endfor %}
+          </div>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-4 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body d-flex flex-column">
+          <h4 class="card-title">
+            Business Sectors
+          </h4>
+          <div class="flex-grow-1 d-flex flex-column justify-content-between">
+                <embed src="/dashboard/pie" type="image/svg+xml">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card text-center">
+          <div class="card-body">
+            {% if expiring: %}
+            <h4 class="card-title" style="text-align: left;">
+                Expiring Soon
+              </h4>
+              <table class="ui table shadow dataTable">
+                  <thead>
+                      <th> # </th>
+                      <th> Service Name </th>
+                      <th> Belongs to </th>
+                      <th> Expiry Date </th>
+                      <th> Days Left </th>
+                      <th> </th>
+                  </thead>
+                  <tbody>
+                      {% for each in expiring %}
+                          <tr class="ui message error">
+                              <td> {{ loop.index }} </td>
+                              <td> {{ each['Title'] }} </td>
+                              <td> {{ each['Name'] }} </td>
+                              <td> {{ each['Next_billing_date'] }} </td>
+                              <td> {{ each['Days'] }} </td>
+                              <td>
+                                  <a href="/bills/renew?sub_id={{set_token(each['id'])}}" class="ui button basic warning"> Renew </a>
+                              </td>
+                          </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+          {% else %}
+                <div class="container">
+                    <h1 class="display-3"> <i class="fas fa-grin-wink    "></i> </h1>
+                    <p class="lead"> All services running smoothly </p>
+                    <hr class="my-2">
+                    <p>More info</p>
+                    <p class="lead">
+                        <a class="btn btn-primary" href="/service" role="button"> Add </a>
+                    </p>
+                </div>
+          {% endif %}
+          </div>
+        </div>
+    </div>
+    <div class="col-md-4 grid-margin stretch-card">
+      <div class="card text-center">
+
+        <div class="card-body">
+          <h4 class="card-title" style="text-align: left;">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            User Profile
+          </h4>
+          <i class="fa fa-user fa-3x" aria-hidden="true"></i>
+          <h4> {{ profile['Name'] }} </h4>
+          <p class="text-muted"> {{ profile['Email'] }} </p>
+          <p class="mt-4 card-text">
+            User Profile Created on {{ profile['Date'] }}
+          </p>
+          <a href='/profile' class="btn btn-sm mt-3 mb-4"> View Profile </a>
+          <div class="border-top pt-3">
+            <div class="row">
+              <div class="col-4">
+                <h6>{{ stats['total_biz'] }}</h6>
+                <p>Businesses</p>
+              </div>
+              <div class="col-4">
+                <h6>{{ stats['installed'] }}</h6>
+                <p>Installed Services</p>
+              </div>
+              <div class="col-4">
+                <h6> {{ stats['pending'] }} </h6>
+                <p> Pending Orders </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-8 grid-margin stretch-card">
+        <div class="card text-center">
+          <div class="card-body">
+            <h4 class="card-title" style="text-align: left;">
+              <i class="fas fa-tachometer-alt"></i>
+              Subscriptions
+            </h4>
+            <embed src="/dashboard/line" type="image/svg+xml">
+          </div>
+        </div>
+    </div>
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card container-fluid" id="posts">
+            <h3> Recent Feed </h3>
+            <div class="ui feed posts">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="text-center">
+    Copyright &copy; 2020 | Appfrican 
+</div>
+<script>
+    var url = 'https://jubaeye.net/';
+    $(document).on('ready', function(){
+        $.ajax({
+            url: url+'wp-json/wp/v2/posts?per_page=3',
+            method: 'GET',
+            success: function(data) {
+                $.each(data, function(index, value){
+                    var date = value.date;
+                    var id = value.id;
+                    var link = value.link;
+                    var title = value.title.rendered;
+                    var excerpt = value.excerpt.rendered;
+                    var media_id = value.featured_media;
+                    var post = '<div class="event"> \
+                        <div class="content"> \
+                        <div class="summary"> \
+                            <a href="'+value.link+'" target+"__blank"> '+title+' </a> \
+                            <div class="date"> \
+                            '+date+' \
+                            </div> \
+                        </div> \
+                        <div class="extra text"> \
+                            '+excerpt+' \
+                        </div> \
+                        </div> \
+                    </div>';
+                    $('.posts').append(post);
+                    //
+                });
+            }
+        })
+    })
+</script>
+{% include 'dashboard/layout/footer.html' %}

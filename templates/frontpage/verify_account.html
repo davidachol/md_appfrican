@@ -1,0 +1,68 @@
+{% include 'frontpage/layout/header.html' %}
+    <div class="ui page dimmer">
+        <div class="content">
+            Verify your email address
+        </div>
+    </div>
+    <!-- Header -->
+    <header id="header" class="ex-2-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-container">
+                        <div class="ui message">
+                            Your email address has not yet been verified. Please check your inbox.
+                        </div>
+                        <button class="btn btn-secondary" id="resend_btn"> Resend Email </button>
+                        <a href="/auth/logout" class="btn btn-danger" id="resend_btn" type="button"> Logout </a>
+                    </div>
+                </div>
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </header> <!-- end of ex-header -->
+    <!-- end of header -->
+    <!-- Scripts -->
+    <script>
+        $('#resend_btn').on('click', function() {
+            event.preventDefault();
+            $.ajax({
+                url: '/auth/resend_email',
+                method: 'POST',
+                data: {
+                    'email': '{{ email }}'
+                },
+                beforeSend: function() {
+                    $('.ui.dimmer').dimmer('show');
+                },
+                complete: function() {
+                    $('.ui.dimmer').dimmer('hide');
+                },
+                success: function (data) {
+                    var status = data.status;
+                    if (status == 'success') {
+                        $('.ui.message').addClass('positive');
+                        $('.ui.message').html(data.message);
+                    }
+                    else if (status == 'error') {
+                        $('.ui.message').addClass('negative');
+                        $('.ui.message').html(data.message);
+                    }
+                },
+                error: function() {
+                    $('.ui.message').addClass('error');
+                    $('.ui.message').html("There was an error, Please Try Again");
+                }
+            })
+        });
+    </script>
+    <script src="../../static/front/js/jquery.min.js"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
+    <script src="../../static/front/js/popper.min.js"></script> <!-- Popper tooltip library for Bootstrap -->
+    <script src="../../static/front/js/bootstrap.min.js"></script> <!-- Bootstrap framework -->
+    <script src="../../static/front/js/jquery.easing.min.js"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
+    <script src="../../static/front/js/swiper.min.js"></script> <!-- Swiper for image and text sliders -->
+    <script src="../../static/front/js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
+    <script src="../../static/front/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
+    <script src="../../static/front/js/scripts.js"></script> <!-- Custom scripts -->
+    <script src="../../static/semantic.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+    <script>
+         $(document).ready(function() {
+            $('.dataTable').DataTable();
+        } );
+        $.fn.digits = function(){ 
+            return this.each(function(){ 
+                $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") ); 
+            })
+        }
+        $("span.numbers").digits();
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.tidio.co/blr8y5cenm6esu3c7jdwe9foqfrigldt.js" async></script>
+    <script>
+        document.tidioIdentify = {
+            distinct_id: "{{session['user_id']}}", // Unique user ID in your system
+            email: "{{session['Email']}}", // User email
+            name: "{{session['Name']}}", // Visitor name
+            city: "{{session['Country']}}", // City
+            country: "{{session['Country']}}" // Country
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+{% include 'frontpage/layout/header.html' %}
+    <div class="ui page dimmer">
+        <div class="content">
+            Signing Up
+        </div>
+    </div>
+    <!-- Header -->
+    <header id="header" class="ex-2-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Sign Up</h1>
+                   <p>Fill out the form below to sign up. Already signed up? Then just <a class="text-dark" href="/auth/login">Log In</a></p> 
+                    <!-- Sign Up Form -->
+                    <div class="form-container">
+                        <div class="ui message">
+                            Fill in details to Signup 
+                        </div>
+                        <form id="signUpForm" action="" method="POST" data-focus="false">
+                            <div class="form-group">
+                                <input type="text" name="name" class="form-control-input" id="s_name" required>
+                                <label class="label-control" for="s_name">Full Name </label>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" name="email" class="form-control-input" id="s_email" required>
+                                <label class="label-control" for="s_email">Email</label>
+                            </div>
+                            <div class="form-group">
+                                <select id="s_gender" class="ui search dropdown  w-100">
+                                    <option value="Male"> Male </option>
+                                    <option value="Female"> Female </option>
+                                    <option value="Other"> Other </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select id="s_country" class="ui search dropdown w-100">
+                                    {% for country in countries %}
+                                        <option value="{{country['Country']}}"> {{country['Country']}} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select id="s_currency" class="ui search dropdown w-100">
+                                    {% for currency in currencies %}
+                                        <option value="{{currency['ToCurrency']}}"> {{currency['ToCurrency']}} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password" class="form-control-input" id="s_password" required>
+                                <label class="label-control" for="s_password">Password</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="confirm" class="form-control-input" id="s_confirm" required>
+                                <label class="label-control" for="s_confirm"> Confirm Password </label>
+                            </div>
+                            <div class="form-group checkbox">
+                                <input type="checkbox" id="nterms" value="Agreed-to-Terms" required>
+                                    I've read and agree to Appfrican written 
+                                <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms Conditions</a>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" name="submit" class="form-control-submit-button" id="signup_btn" value="SignUp">
+                            </div>
+                        </form>
+                    </div>
+                     <!-- end of form container -->
+                    <!-- end of sign up form -->
+
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </header> <!-- end of ex-header -->
+    <!-- end of header -->
+    <!-- Scripts -->
+    <script src="../../static/front/js/jquery.min.js"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
+    <script src="../../static/front/js/popper.min.js"></script> <!-- Popper tooltip library for Bootstrap -->
+    <script src="../../static/front/js/bootstrap.min.js"></script> <!-- Bootstrap framework -->
+    <script src="../../static/front/js/jquery.easing.min.js"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
+    <script src="../../static/front/js/swiper.min.js"></script> <!-- Swiper for image and text sliders -->
+    <script src="../../static/front/js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
+    <script src="../../static/front/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
+    <script src="../../static/front/js/scripts.js"></script> <!-- Custom scripts -->
+    <script src="../../static/semantic.min.js"></script>
+    <script>
+        $('#signup_btn').on('click', function() {
+            event.preventDefault();
+            var email = $('#s_email').val();
+            var name = $('#s_name').val();
+            var gender = $('#s_gender option:selected').text();
+            var country = $('#s_country option:selected').text();
+            var currency = $('#s_currency option:selected').text();
+            var password = $('#s_password').val();
+            var confirm = $('#s_confirm').val();
+            if ((email != '') && (password != '')) {
+                $.ajax({
+                    url: '/auth/signup',
+                    method: 'POST',
+                    data: {
+                        'name': name,
+                        'email': email,
+                        'gender': gender,
+                        'country': country,
+                        'currency': currency,
+                        'password': password,
+                        'confirm': confirm
+                    },
+                    beforeSend: function() {
+                        $('.ui.dimmer').dimmer('show');
+                    },
+                    complete: function() {
+                        $('.ui.dimmer').dimmer('hide');
+                    },
+                    success: function (data) {
+                        var status = data.status;
+                        if (status == 'success') {
+                            window.location = '/dashboard';
+                        }
+                        else if (status == 'error') {
+                            $('.ui.message').addClass('error');
+                            $('.ui.message').html(data.message);
+                        }
+                    },
+                    error: function() {
+                        $('.ui.message').addClass('error');
+                        $('.ui.message').html("There was an error, Please Try Again");
+                    }
+                });
+            }
+        })
+        $('select.ui.search.dropdown').dropdown();
+        
+    </script>
+</body>
+</html>

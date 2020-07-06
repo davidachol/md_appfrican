@@ -1,0 +1,188 @@
+{% include 'dashboard/layout/header.html' %}
+
+{% if page == '' %}
+    <div class="ui breadcrumb">
+        <div class="section">Home</div>
+        <div class="divider"> / </div>
+        <div class="section active"> Billing Information </div>
+    </div> <hr>
+    <div class="ui grid stackable padded">
+        <div class="column">
+            <table class="table table-hover shadow dataTable" data-toggle="table">
+                <thead>
+                    <tr>
+                        <th scope="col"> # </th>
+                        <th scope="col"> Service </th>
+                        <th scope="col"> Category </th>
+                        <th scope="col"> Duration </th>
+                        <th scope="col"> Amount </th>
+                        <th scope="col"> Next_billing_date </th>
+                        <th scope="col"> Date </th>
+                        <th scope="col"> Status </th>
+                        <th scope="col"> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bill in billing %}
+                        {% if bill['Status'] == 1 %}
+                        <tr class="ui message positive"  scope="row"> 
+                            <td> {{ loop.index }} </td>
+                            <td> {{ bill['Title'] }} </td>
+                            <td> {{ bill['Category'] }} </td>
+                            <td> {{ bill['Duration'] }} Months </td>
+                            <td> <span class="numbers"> {{ xrate(bill['Amount']) }} </span> </td>
+                            <td> {{ bill['Next_billing_date'] }} </td>
+                            <td> {{ bill['Date'] }} </td>
+                            <td> Installed </td>
+                            <td></td>
+                        </tr>
+                        {% elif bill['Status'] == 0 %}
+                        <tr class="ui message warning"> 
+                            <td> {{ loop.index }} </td>
+                            <td> {{ bill['Title'] }} </td>
+                            <td> {{ bill['Category'] }} </td>
+                            <td> {{ bill['Duration'] }} Months </td>
+                            <td> <span class="numbers"> {{ xrate(bill['Amount']) }} </span> </td>
+                            <td> - </td>
+                            <td> {{ bill['Date'] }} </td>
+                            <td> Payment Pending </td>
+                            <td> <a href="/bills/pay?sub_id={{set_token(bill['id'])}}" class="ui button secondary"> Finish Payment </a> </td>
+                        </tr>
+                        {% elif bill['Status'] == 2 %}
+                        <tr class="ui message danger"> 
+                            <td> {{ loop.index }} </td>
+                            <td> {{ bill['Title'] }} </td>
+                            <td> {{ bill['Category'] }} </td>
+                            <td> {{ bill['Duration'] }} Months </td>
+                            <td> {{ xrate(bill['Amount']) }} </td>
+                            <td> - </td>
+                            <td> {{ bill['Date'] }} </td>
+                            <td> Expired </td>
+                            <td> <a href="/bills/renew?sub_id={{set_token(bill['id'])}}" class="ui button secondary"> Renew </a> </td>
+                        </tr>
+                        {% elif bill['Status'] == 3 %}
+                            <tr class="ui message positive"> 
+                                <td> {{ loop.index }} </td>
+                                <td> {{ bill['Title'] }} </td>
+                                <td> {{ bill['Category'] }} </td>
+                                <td> - </td>
+                                <td> - </td>
+                                <td> - </td>
+                                <td> {{ bill['Date'] }} </td>
+                                <td> Freely Installed </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% elif page == 'pay' %}
+    <div class="ui message container positive">
+        <div id="response">
+            Processing Payment
+        </div>
+    </div>
+    <script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
+    <script>
+        var email = '{{ profile["email"] }}';
+        var txref = '{{ profile["txref"] }}';
+        var business_id = '{{ set_token(profile["business_id"]) }}';
+        var service_id = '{{ set_token(profile["service_id"]) }}';
+        var currency = '{{ profile["currency"] }}';
+        var converted = parseInt('{{ xrate(sub["Amount"]) }}')+parseInt('{{ xrate(sub["Setup_cost"]) }}');
+        const API_publicKey = "FLWPUBK-5d6c87654e9e65b3b80da2c0f476c936-X";
+        var sub_id = '{{ set_token(sub["id"]) }}';
+        var x = getpaidSetup({
+            PBFPubKey: API_publicKey,
+            customer_email: email,
+            amount: converted,
+            currency: currency.trim(),
+            txref: 'rave-'+txref,
+            onclose: function () {
+                window.location = '/business/view/'+business_id;
+            },
+            callback: function (response) {
+                var txref = response.data.txRef;
+                if (response.success == false) {
+                    var error_msg = '<div class="ui raised segment red"> \
+                        <strong class="bg-danger text-white"> Warning </strong> \
+                        <div class="header"> <strong> Payment Not Successful </strong> </div> \
+                        <div class="text-muted"> Flutterwave </div> \
+                        <p> The Payment wasnt successfull, Please Make sure to put current details </p> \
+                    </div>';
+                    $('#response').html(error_msg);
+                }
+                if (
+                    response.data.chargeResponseCode == "00" ||
+                    response.data.chargeResponseCode == "0"
+                ) {
+                    var link = '/{{ servicez["config_file"] }}?sub_id='+sub_id;
+                    var success_msg = '<div class="ui raised segment green"> \
+                        <strong class="bg-green text-white"> Success </strong> \
+                        <div class="header"> <strong> Payment Successfull </strong> </div> \
+                        <p> Payment from Business Name has been recieved </p> \
+                        <a href="'+link+'" class="ui button bg-danger text-white p-2"> View Service </a> \
+                    </div>';
+                    $('#response').html(success_msg);
+                    window.location = link;
+                } else {
+                    var link = '/bills/verify?sub_id='+sub_id;
+                    window.location = link;
+                }
+                window.location = '/business/view/'+business_id;
+                x.close();
+                window.location = '/business/view/'+business_id;
+            }
+        });
+    </script>
+
+{% elif page == 'cancel' %}
+    <center>
+        <div class="ui message danger">
+            Are you Sure you want to cancel this service? 
+            This action cannot be reversed. 
+            <br>
+            <button id="cancel" class="ui button danger"> Cancel Service </button>
+        </div>
+    </center>
+    <script>
+        $('#cancel').on('click', function () {
+            $.ajax({
+                url: '/bills/cancel/{{sub_id}}',
+                method: 'POST',
+                beforeSend: function () {
+                    $('.ui.dimmer').dimmer('show');
+                },
+                complete: function () {
+                    $('.ui.dimmer').dimmer('hide');
+                },
+                success: function () {
+                    window.location = '/bills'
+                }
+            })
+        });
+    </script>
+{% elif page == 'renew' %}
+    <center>
+        <div class="ui card">
+            <h3 class="card-title"> Select Renew Durations </h3>
+            <div class="card-body">
+                <h4> Renewal form for Service - Business </h4>
+                <p class="text-muted"> 4$ Per Month, 50$ Per Year </p>
+                <form action="" class="ui form">
+                    <select name="" id="">
+
+                    </select>
+                    <button class="btn btn-success"> Renew Payment </button>
+                </form>
+            </div>
+        </div>
+        <script>
+            
+        </script>
+    </center>
+{% endif %}
+
+
+{% include 'dashboard/layout/footer.html' %}

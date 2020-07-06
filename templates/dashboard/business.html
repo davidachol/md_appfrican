@@ -1,0 +1,634 @@
+{% include 'dashboard/layout/header.html' %}
+
+{% if page == 'add' %}
+    <div class="container center w-50">
+        <form action="" method="POST" class="ui form">
+            <div class="ui message">
+                Create a basic business profile, or you can request another user to invite you to a business dashboard.
+            </div>
+            <div class="field">
+                <label for=""> Business Name <i class="text-danger"> * </i> </label>
+                <input name="name" id="name" type="text" required placeholder="My Business Name">
+            </div>
+            <div class="field">
+                <label for=""> Description <i class="text-danger"> * </i> </label>
+                <textarea required name="description" id="description" cols="15" rows="3" placeholder="About the Company. Short Description"></textarea>
+            </div>
+            <div class="field">
+                <label for=""> Location / Address </label>
+                <input type="text" id="location" name="location">
+            </div>
+            <div class="field">
+                <label for=""> Phone (Optional)</label>
+                <input type="text" id="phone" name="phone">
+            </div>
+            <div class="field">
+                <label for=""> Business Sector <i class="text-danger"> * </i> </label>
+                <select name="sector" class="ui dropdown search" id="sector">
+                    {% for sector in sectors %}
+                        <option value="{{sector['Sector']}}"> {{ sector['Sector'] }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input name="submit" type="submit" id="add_btn" value="Add Business" class="ui button positive">
+        </form>
+    </div>
+    <script>
+        $('.ui.dropdown').dropdown();
+        $('#add_btn').on('click', function() {
+            event.preventDefault();
+            var name = $('#name').val();
+            var description = $('#description').val();
+            var location = $('#location').val();
+            var phone = $('#phone').val();
+            var sector = $('#sector option:selected').text();
+            if ((name != '') && (sector != '')) {
+                $.ajax({
+                    url: '/business/add',
+                    method: 'POST',
+                    data: {
+                        'name': name,
+                        'description': description,
+                        'location': location,
+                        'phone': phone,
+                        'sector': sector
+                    },
+                    beforeSend: function() {
+                        $('.ui.dimmer').dimmer('show');
+                    },
+                    complete: function() {
+                        $('.ui.dimmer').dimmer('hide');
+                    },
+                    success: function (data) {
+                        var status = data.status;
+                        if (status == 'success') {
+                            var business_id = data.business_id;
+                            window.location = '/business/view/'+business_id;
+                        }
+                        else if (status == 'error') {
+                            $('.ui.message').addClass('error');
+                            $('.ui.message').html(data.message);
+                        }
+                    },
+                    error: function() {
+                        $('.ui.message').addClass('error');
+                        $('.ui.message').html("There was an error, Please Try Again");
+                    }
+                });
+            }
+            else {
+                $('#name').addClass('border border-danger');
+                $('#sector').addClass('border border-danger');
+            }
+        });
+    </script>
+{% elif page == 'sub_view' %}
+    <div class="ui top attached tabular menu  container ml-5 mr-5">
+        <a class="active item" data-tab="first"> Services </a>
+        <a class="item" data-tab="second"> Profile </a>
+        <a class="item" data-tab="third"> Other Users </a>
+    </div>
+    <div class="container ui bottom attached active tab segment container-fluid" data-tab="first">
+        <div class="ui grid stackable padded">
+            <div class="column">
+                {% if not services %}
+                    <div class="jumbotron bg-light text-center">
+                        <h1 class="display-3"> <i class="fas fa-sad-cry fa-2x"></i> </h1>
+                        <p class="lead"> No Subscibed Services. Contact the administrator to add services. </p>
+                        <hr class="my-2">
+                        <p class="lead">
+                            Such Empty
+                        </p>
+                    </div>
+                {% else %}
+                    <hr>
+                    <div class="ui grid stackable padded">
+                    {% for r in services %}
+                        <div class="four wide computer eight wide tablet sixteen wide mobile column">
+                            <div class="ui fluid card shadow-lg">
+                                <div class="card-header">
+                                    <div class="dropdown open">
+                                        <button class="btn dropdown-toggle" style="float: right;" type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                    Actions
+                                                </button>
+                                        <div class="dropdown-menu" aria-labelledby="triggerId">
+                                            <a class="dropdown-item" href="/service/overview/{{ set_token(r['service_id']) }}"> Service Info </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <div class="ui right floated header">
+                                        <i class="{{ r['icon'] }}" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="header">
+                                        <div class="ui header">
+                                            {{ r['Title'] }}
+                                        </div>
+                                    </div>
+                                    <div class="meta">
+                                        {{ r['Subtitle'] }}
+                                    </div>
+                                    <div class="description">
+                                        {{ r['Category'] }}
+                                    </div>
+                                </div>
+                                {% if r['Status'] == 1 %}
+                                    <div class="extra content">
+                                        <div class="ui">
+                                            <a href="/{{r['config_file']}}?sub_id={{ set_token(r['id']) }}" class="ui primary button w-100 text-white"> <i class="fa fa-eye" aria-hidden="true"></i> View </a>
+                                        </div>
+                                    </div>
+                                {% elif r['Status'] == 3 %}
+                                    <div class="extra content">
+                                        <div class="ui">
+                                            <a href="/{{r['config_file']}}?sub_id={{ set_token(r['id']) }}" class="ui primary button w-100 text-white"> <i class="fa fa-eye" aria-hidden="true"></i> View </a>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="extra content">
+                                        <p> Not available </p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="container ui bottom attached tab segment container-fluid" data-tab="second">
+        <div class="ui grid stackable padded">
+            <div class="column">
+                <table class="table table-striped dataTable">
+                    <tr>
+                        <th> Date Created </th>
+                        <td> {{ profile['Date'] }} </td>
+                    </tr>
+                    <tr>
+                        <th> Name </th>
+                        <td> {{ profile['Name'] }} </td>
+                    </tr>
+                    <tr>
+                        <th> Location </th>
+                        <td> {{ profile['Location'] }} </td>
+                    </tr>
+                    <tr>
+                        <th> Phone </th>
+                        <td> {{ profile['Phone'] }} </td>
+                    </tr>
+                    <tr>
+                        <th> Description </th>
+                        <td colspan="3"> {{ profile['Description'] }} </td>
+                    </tr>
+                    <tr>
+                        <th> Sector </th>
+                        <td> {{ profile['Sector'] }} </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container ui bottom attached tab segment container-fluid" data-tab="third">
+        <div class="ui grid stackable padded">
+            <div class="column">
+                <table class="ui table">
+                    <tbody>
+                        <tr class="bg-primary text-white">
+                            <th>#</th>
+                            <th> {{ business_admin['Name'] }} </th>
+                            <th> {{ business_admin['Email'] }} </th>
+                            <th colspan="3"> Main Administrator </th>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-hover shadow dataTable" data-toggle="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col"> Name </th>
+                            <th scope="col"> Email  </th>
+                            <th scope="col"> Role </th>
+                            <th scope="col"> Comment </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usr in others %}
+                            <tr>
+                                <td> {{ loop.index }} </td>
+                                <td> {{ usr['Name'] }} </td>
+                                <td> {{ usr['Email'] }} </td>
+                                <td> {{ usr['Role'] }} </td>
+                                <td> {{ usr['Comment'] }} </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('.menu .item').tab();
+    </script>
+{% elif page == 'view' %}
+    <div class="ui top attached tabular menu  container ml-5 mr-5">
+        <a class="active item" data-tab="first"> Services </a>
+        <a class="item" data-tab="second"> Billing </a>
+        <a class="item" data-tab="third"> Profile </a>
+        <a class="item" data-tab="forth"> Other Users </a>
+    </div>
+    <div class="container ui bottom attached active tab segment container-fluid" data-tab="first">
+        <div class="ui grid stackable padded">
+            <div class="column">
+                {% if not services %}
+                    <div class="jumbotron bg-light text-center">
+                        <h1 class="display-3"> <i class="fas fa-sad-cry fa-2x"></i> </h1>
+                        <p class="lead"> Wow, Such Empty </p>
+                        <hr class="my-2">
+                        <p class="lead">
+                            <a href="/service" class="ui btn btn-lg bg-primary text-white"> <i class="fa fa-plus" aria-hidden="true"></i> Browse Services </a>
+                        </p>
+                    </div>
+                {% else %}
+                    <a href="/service" class="ui btn btn-lg bg-primary text-white"> <i class="fa fa-plus" aria-hidden="true"></i> Add Services </a>
+                    <hr>
+                    <div class="ui grid stackable padded">
+                    {% for r in services %}
+                        <div class="four wide computer eight wide tablet sixteen wide mobile column">
+                            <div class="ui fluid card shadow-lg">
+                                <div class="card-header">
+                                    <div class="dropdown open">
+                                        <button class="btn dropdown-toggle" style="float: right;" type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                    Actions
+                                                </button>
+                                        <div class="dropdown-menu" aria-labelledby="triggerId">
+                                            <a class="dropdown-item" href="/service/overview/{{ set_token(r['service_id']) }}"> Service Info </a>
+                                            {% if r['Status'] == 1 %}
+                                                <a class="dropdown-item" href="/bills/reciept/{{ set_token(r['id']) }}"> Reciept </a>
+                                            {% else %}
+                                                <a class="dropdown-item" href="/bills/quotation/{{ set_token(r['id']) }}"> Invoice </a>
+                                            {% endif %}
+                                            <a class="dropdown-item bg-danger text-white" href="/bills/cancel/{{ set_token(r['id']) }}"> Cancel </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <div class="ui right floated header">
+                                        <i class="{{ r['icon'] }}" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="header">
+                                        <div class="ui header">
+                                            {{ r['Title'] }}
+                                        </div>
+                                    </div>
+                                    <div class="meta">
+                                        {{ r['Subtitle'] }}
+                                    </div>
+                                    <div class="description">
+                                        {{ r['Category'] }}
+                                    </div>
+                                </div>
+
+                                {% if r['Status'] == 0 %}
+                                    <div class="extra content">
+                                        <div class="ui two buttons">
+                                            <a class="ui button bg-warning text-white m-1 w-100" href="/bills/pay?sub_id={{ set_token(r['id']) }}"> Pay </a>
+                                        </div>
+                                    </div>
+                                {% elif r['Status'] == 1 %}
+                                    <div class="extra content">
+                                        <div class="ui">
+                                            <a href="/{{r['config_file']}}?sub_id={{ set_token(r['id']) }}" class="ui primary button w-100 text-white"> <i class="fa fa-eye" aria-hidden="true"></i> View </a>
+                                        </div>
+                                    </div>
+                                {% elif r['Status'] == 3 %}
+                                    <div class="extra content">
+                                        <div class="ui">
+                                            <a href="/{{r['config_file']}}?sub_id={{ set_token(r['id']) }}" class="ui primary button w-100 text-white"> <i class="fa fa-eye" aria-hidden="true"></i> View </a>
+                                        </div>
+                                    </div>
+                                {% elif r['Status'] == 2 %}
+                                    <div class="extra content">
+                                        <div class="ui">
+                                            <a href="/bills/renew?sub_id={{ set_token(r['id']) }}" class="ui yellow button w-100 text-white"> <i class="fa fa-eye" aria-hidden="true"></i> Renew </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="container ui bottom attached tab segment" data-tab="second">
+        <div class="ui grid stackable padded">
+            <div class="column">
+                <table class="ui table shadow-lg dataTable" data-toggle="table">
+                    <thead>
+                        <tr>
+                            <th> # </th>
+                            <th> Service </th>
+                            <th> Category </th>
+                            <th> Duration </th>
+                            <th> Amount </th>
+                            <th> Next_billing_date </th>
+                            <th> Date </th>
+                            <th> Status </th>
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bill in billing %}
+                            {% if bill['Status'] == 1 %}
+                            <tr class="ui message positive"> 
+                                <td> {{ loop.index }} </td>
+                                <td> {{ bill['Title'] }} </td>
+                                <td> {{ bill['Category'] }} </td>
+                                <td> {{ bill['Duration'] }} Months </td>
+                                <td> {{ xrate(bill['Amount']) }} </td>
+                                <td> {{ bill['Next_billing_date'] }} </td>
+                                <td> {{ bill['Date'] }} </td>
+                                <td> Installed </td>
+                                <td></td>
+                            </tr>
+                            {% elif bill['Status'] == 0 %}
+                            <tr class="ui message warning"> 
+                                <td> {{ loop.index }} </td>
+                                <td> {{ bill['Title'] }} </td>
+                                <td> {{ bill['Category'] }} </td>
+                                <td> {{ bill['Duration'] }} Months </td>
+                                <td> {{ xrate(bill['Amount']) }} </td>
+                                <td> - </td>
+                                <td> {{ bill['Date'] }} </td>
+                                <td> Payment Pending </td>
+                                <td> <a href="/bills/pay?sub_id={{set_token(bill['id'])}}" class="ui button secondary"> Finish Payment </a> </td>
+                            </tr>
+                            {% elif bill['Status'] == 2 %}
+                            <tr class="ui message danger"> 
+                                <td> {{ loop.index }} </td>
+                                <td> {{ bill['Title'] }} </td>
+                                <td> {{ bill['Category'] }} </td>
+                                <td> {{ bill['Duration'] }} Months </td>
+                                <td> {{ xrate(bill['Amount']) }} </td>
+                                <td> - </td>
+                                <td> {{ bill['Date'] }} </td>
+                                <td> Expired </td>
+                                <td> <a href="/bills/renew?sub_id={{set_token(bill['id'])}}" class="ui button secondary"> Renew </a> </td>
+                            </tr>
+                            {% elif bill['Status'] == 3 %}
+                                <tr class="ui message positive"> 
+                                    <td> {{ loop.index }} </td>
+                                    <td> {{ bill['Title'] }} </td>
+                                    <td> {{ bill['Category'] }} </td>
+                                    <td> - </td>
+                                    <td> - </td>
+                                    <td> - </td>
+                                    <td> {{ bill['Date'] }} </td>
+                                    <td> Freely Installed </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="third">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Edit Information
+          </button>
+          <!-- Modal -->
+          <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel"> Edit details </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/business/edit" method="POST" class="ui form">
+                        <div class="field">
+                            <label for=""> Business Name <i class="text-danger"> * </i> </label>
+                            <input name="name" type="text" required placeholder="Kenya Airways" value="{{ profile['Name'] }}">
+                        </div>
+                        <div class="field">
+                            <label for=""> Description <i class="text-danger"> * </i> </label>
+                            <textarea required name="description" id="" cols="30" rows="5" placeholder="About the Company. Short Description">{{ profile['Description'] }}</textarea>
+                        </div>
+                        <div class="field">
+                            <label for=""> Location / Address </label>
+                            <input type="text" name="location" value="{{ profile['Location'] }}">
+                        </div>
+                        <div class="field">
+                            <label for=""> Phone </label>
+                            <input type="text" name="phone" value="{{ profile['Phone'] }}">
+                        </div>
+                        <input name="submit" type="submit" value="Edit Profile" class="ui button positive">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <table class="table table-striped dataTable">
+            <tr>
+                <th> Date Created </th>
+                <td> {{ profile['Date'] }} </td>
+            </tr>
+            <tr>
+                <th> Name </th>
+                <td> {{ profile['Name'] }} </td>
+            </tr>
+            <tr>
+                <th> Location </th>
+                <td> {{ profile['Location'] }} </td>
+            </tr>
+            <tr>
+                <th> Phone </th>
+                <td> {{ profile['Phone'] }} </td>
+            </tr>
+            <tr>
+                <th> Description </th>
+                <td colspan="3"> {{ profile['Description'] }} </td>
+            </tr>
+            <tr>
+                <th> Sector </th>
+                <td> {{ profile['Sector'] }} </td>
+            </tr>
+        </table>
+    </div>
+    <div class="container ui bottom attached tab segment" data-tab="forth">
+        <div class="ui grid stackable padded">
+            <div class="column">
+                <div class="ui container">
+                    <h3> Invite other users (coworkers and employees) to manage your business </h3>
+                </div>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modelId">
+                    Add User
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                {% if services %}
+                                    <form action="" id="invite_form" class="ui form">
+                                        <div class="ui message" id="response">
+                                            Add a user profile and an invitation link will be forwarded to them
+                                        </div>
+                                        <div class="form-group">
+                                            <label for=""></label>
+                                            <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" aria-describedby="emailHelpId" placeholder="">
+                                            <small id="emailHelpId" class="form-text text-muted"> A link will be forwared to the email address. Work Email preffered. </small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for=""></label>
+                                            <input type="text" class="form-control" placeholder="e.g Manager, Cashier, Owner, Operations, etc" name="role" id="role" aria-describedby="helpId" placeholder="">
+                                            <small id="helpId" class="form-text text-muted"> Role/Position of the user </small>
+                                        </div>
+                                        <div class="form-group">
+                                        <label for=""> Comment </label>
+                                        <textarea class="form-control" name="comment" id="comment" rows="2"></textarea>
+                                        </div>
+                                        <fieldset>
+                                            <legend> Provide Access to following Service </legend>
+                                            <div class="form-group">
+                                            <label for=""> Service </label>
+                                            <select class="form-control" name="service" id="service">
+                                                {% for each in services %}
+                                                    {% if each['Status'] == 1 %}
+                                                        <option value="{{ set_token(each['id']) }}"> {{ each['Title'] }} </option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            </div>
+                                        </fieldset>
+                                        <button id="invite_btn" type="submit" class="btn btn-primary"> Invite User </button>
+                                    </form>
+                                {% else %}
+                                    <div class="jumbotron jumbotron-fluid">
+                                        <div class="container">
+                                            <h1 class="display-3"> No Active Services </h1>
+                                            <p class="lead"> You cannot invite other users without an active service </p>
+                                            <hr class="my-2">
+                                            <p> Activate or add a service </p>
+                                            <p class="lead">
+                                                <a class="btn btn-success btn-lg" href="/service" role="button"> + Add Service </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <table class="ui table">
+                    <tbody>
+                        <tr class="bg-primary text-white">
+                            <th>#</th>
+                            <th> {{ business_admin['Name'] }} </th>
+                            <th> {{ business_admin['Email'] }} </th>
+                            <th colspan="3"> Main Administrator </th>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-hover shadow dataTable" data-toggle="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col"> Name </th>
+                            <th scope="col"> Email  </th>
+                            <th scope="col"> Role </th>
+                            <th scope="col"> Comment </th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usr in others %}
+                            <tr scope="row">
+                                <td> {{ loop.index }} </td>
+                                <td> {{ usr['Name'] }} </td>
+                                <td> {{ usr['Email'] }} </td>
+                                <td> {{ usr['Role'] }} </td>
+                                <td> {{ usr['Comment'] }} </td>
+                                <td> 
+                                    <a href="/business/invite/edit/{{usr['Email']}}" class="ui button basic primary"> <i class="fas fa-user-edit"></i> </a>
+                                    <a href="/business/invite/delete/{{usr['Email']}}" class="ui button basis danger"> <i class="fa fa-trash" aria-hidden="true"></i> </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#invite_form").on("submit", function( event ) {
+            event.preventDefault();
+            var email = $('#email').val();
+            var role = $('#role').val();
+            var comment = $('#comment').val();
+            var service = $('#service option:selected').val();
+            var business_id = '{{set_token(session["select_biz"]["id"])}}';
+            if (service == null) {
+
+            }
+            else {
+                if (email != '') {
+                    $.ajax({
+                        url: '/business/invite/add',
+                        method: 'POST',
+                        data: {
+                            'email': email,
+                            'role': role,
+                            'comment': comment,
+                            'service': service,
+                            'business_id': business_id
+                        },
+                        success: function(data) {
+                            if (data.status == 'success') {
+                                window.location = '/alert/';
+                            }
+                            else {
+                                $('#response').addClass('ui message negative');
+                                $('#email').addClass('border border-danger');
+                                $('#response').html('This email isnt registered. Please register the user first');
+                            }
+                        }
+                    })
+                }
+                else {
+                    $('#email').addClass('border border-danger');
+                }
+            }
+        });
+        $('.menu .item').tab();
+        $('#edit_info').on('click', function () {
+            $('.ui.modal').modal('show');
+        });
+    </script>
+{% else %}
+
+{% endif %}
+
+{% include 'dashboard/layout/footer.html' %}

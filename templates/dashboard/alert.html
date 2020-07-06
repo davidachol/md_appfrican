@@ -1,0 +1,52 @@
+{% include 'dashboard/layout/header.html' %}
+
+{% if page == '' %}
+    <div class="ui breadcrumb">
+        <div class="section">Home</div>
+        <div class="divider"> / </div>
+        <div class="section active"> Notifications </div>
+    </div> <hr>
+    <div class="container">
+        Recent Notifications
+        <table class="ui table shadow dataTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Business</th>
+                    <th>Service </th>
+                    <th>Category </th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for each in row: %}
+                    {% if each['Status'] == 0: %}
+                        <tr class="text-primary">
+                    {% else %}
+                        <tr>
+                    {% endif %}
+                        <td> {{loop.index}} </td>
+                        <td> {{ each['Date']}} </td>
+                        <td> {{ each['Name']}} </td>
+                        <td> {{ each['Title'] }} </td>
+                        <td> {{ each['Kind'] }} </td>
+                        <td> <a href="/alert/view/{{set_token(each['id'])}}" class="ui button basic"> <i class="fa fa-eye" aria-hidden="true"></i> View  </a> </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% elif page == 'view' %}
+    <div class="ui breadcrumb">
+    <div class="section">Home</div>
+    <div class="divider"> / </div>
+    <div class="section"> Notifications </div>
+    <div class="divider"> / </div>
+    <div class="section active"> View </div>
+
+    </div> <br>
+{% endif %}
+
+
+{% include 'dashboard/layout/footer.html' %}

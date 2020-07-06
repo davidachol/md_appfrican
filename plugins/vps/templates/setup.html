@@ -1,0 +1,46 @@
+<center>
+    <h3> Basic VPS setup </h3>
+    <form action="" class="ui form w-50 shadow-lg">
+        <div id="response">
+
+        </div>
+        <div class="field container">
+            <label> Select OS </label>
+            <select class="ui dropdown search" id="os">
+                {% for each in os %}
+                    <option value="{{ each['id'] }}"> {{ each['name'] }} </option>
+                {% endfor %}
+            </select>
+        </div> <br>
+        <button class="ui button secondary" id="create"> Create </button>
+    </form>
+</center>
+<script>
+    $('#create').on('click', function () {
+        event.preventDefault();
+        var os = $('#os option:selected').val();
+        $.ajax({
+            url: '/basic_vps/setup?sub_id={{sub_id}}',
+            method: 'POST',
+            data: {
+                'os': os
+            },
+            beforeSend: function () {
+                $('.ui.dimmer').dimmer('show');
+            },
+            complete: function () {
+                $('.ui.dimmer').dimmer('hide');
+            },
+            success: function (data) {
+                if (data.status == 'success') {
+                    window.location = '/basic_vps'
+                }
+                else {
+                    $('#response').addClass('ui message danger');
+                    $('#response').html(data.message)
+                }
+                
+            }
+        });
+    })
+</script>

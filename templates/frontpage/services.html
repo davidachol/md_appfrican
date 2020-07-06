@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Website Title -->
+    <title> Appfrican | Business Management Platform </title>
+    
+    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap&subset=latin-ext" rel="stylesheet">
+    <link href="{{ url_for('static', filename='front/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='front/css/fontawesome-all.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='swiper.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='front/css/magnific-popup.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='front/css/styles.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='typed.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='semantic.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+	<!-- Favicon  -->
+    <link rel="icon" href="../../static/favicon.ico">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8HTX0ZR40E"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-8HTX0ZR40E');
+    </script>
+</head>
+<a href="/" class="btn btn-primary" type="button"> Back </a>
+<hr>
+{% if page == '' %}
+    <div class="ui pointing menu container-fluid">
+        <a class="active item">
+            Popular
+        </a>
+        {% for cat in categories %}
+            <a href="/services/category/{{cat['Category']}}" class="item"> {{ cat['Category'] }} </a>
+        {% endfor %}
+        <div class="right menu">
+            <div class="item">
+                <div class="ui transparent icon input disabled">
+                    <input type="text" placeholder="Search...">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui container-fluid link cards">
+        {% for s in services %}
+            <div class="card shadow">
+                <a class="image" href="/service/overview/{{ set_token(s['id']) }}">
+                    {% if s['Featured_Image'] is not none %}
+                        <img src="data:image/png;base64, {{ str(base64.b64encode(s['Featured_Image']).decode("utf-8")) }}">
+                    {% else %}
+                        <img src="">
+                    {% endif %}
+                </a>
+                <div class="content">
+                <div class="card-title"> <a class="card-title pt-4" href="/services/view/{{ set_token(s['id']) }}"> {{ s['Title'] }} </a> </div>
+                <div class="meta">
+                    <a> <span class="cinema"> {{ s['Subtitle'] }} </span> </a>
+                </div>
+                <div class="description">
+                        <p> {{ s['Comment']}} </p>
+                </div>
+                </div>
+                <div class="extra content">
+                <span class="right floated">
+                        <a href="/services/view/{{ set_token(s['id']) }}" class="btn btn-primary text-white" type="button"> View <i class="right chevron icon"></i> </a>
+                </span>
+                <span>
+                    {% if s['Country'] == 'ALL' %}
+                        <i class="world icon"></i>
+                    {% else %}
+                        <i class="{{ s['Country'] }} flag"></i>
+                    {% endif %}
+                    <div class="ui label">{{ s['Category']}}</div>
+                </span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% elif page == 'category' %}
+    <div class="ui pointing menu">
+        <a class="item" href="/services">
+            Popular
+        </a>
+        {% for cat in categories %}
+            {% if cat['Category'] == category %}
+                <a href="/services/category/{{cat['Category']}}" class="item active"> {{ cat['Category'] }} </a>
+            {% else %}
+                <a href="/services/category/{{cat['Category']}}" class="item"> {{ cat['Category'] }} </a>
+            {% endif %}
+        {% endfor %}
+        <div class="right menu">
+            <div class="item">
+                <div class="ui transparent icon input">
+                    <input type="text" placeholder="Search...">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui container-fluid link cards">
+        {% for s in services %}
+            <div class="card shadow">
+                <a class="image" href="/services/view/{{ set_token(s['id']) }}">
+                    {% if s['Featured_Image'] is not none %}
+                        <img src="data:image/png;base64, {{ str(base64.b64encode(s['Featured_Image']).decode("utf-8")) }}">
+                    {% else %}
+                        <img src="">
+                    {% endif %}
+                </a>
+                <div class="content">
+                <div class="card-title"> <a class="card-title pt-4" href="/services/view/{{ set_token(s['id']) }}"> {{ s['Title'] }} </a> </div>
+                <div class="meta">
+                    <a> <span class="cinema"> {{ s['Subtitle'] }} </span> </a>
+                </div>
+                <div class="description">
+                        <p> {{ s['Comment']}} </p>
+                </div>
+                </div>
+                <div class="extra content">
+                <span class="right floated">
+                        <a href="/services/view/{{ set_token(s['id']) }}" class="btn btn-primary text-white" type="button"> View <i class="right chevron icon"></i> </a>
+                </span>
+                <span>
+                    {% if s['Country'] == 'ALL' %}
+                        <i class="world icon"></i>
+                    {% else %}
+                        <i class="{{ s['Country'] }} flag"></i>
+                    {% endif %}
+                    <div class="ui label">{{ s['Category']}}</div>
+                </span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% elif page == 'view' %}
+<head>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{{ servicez['Subtitle'] }}">
+    <!-- OG Meta Tags to improve the way the post looks when you share the page on LinkedIn, Facebook, Google+ -->
+	<meta property="og:site_name" content="" /> <!-- website name -->
+	<meta property="og:site" content="www.appfrican.co" /> <!-- website link -->
+	<meta property="og:title" content="{{ servicez['Title'] }} - Appfrican"/> <!-- title shown in the actual shared post -->
+	<meta property="og:description" content="{{ servicez['Subtitle'] }}" /> <!-- description shown in the actual shared post -->
+	<meta property="og:image" content="" /> <!-- image link, make sure it's jpg -->
+    <meta property="og:url" content="" /> <!-- where do you want your post to link to -->
+</head>
+<div class="jumbotron jumbotron-fluid text-white mb-0" style="background-color: rgb(62, 62, 195); ">
+        <div class="container">
+            <center>
+                <h1 class="display-3 text-white"> {{ servicez['Title'] }} </h1>
+                <p class="lead text-white"> {{ servicez['Subtitle'] }} </p>
+                <hr class="my-2">
+                <a href="/service/overview/{{set_token(servicez['id'])}}" class="ui huge secondary button">
+                    Install starting @ <span class="numbers monthly"> {{ servicez['Monthly'] }} USD </span> <span class="currency"> </span> Monthly
+                </a>
+                <div class="text-white container p-2">
+                    <div class="ui label"> <i class="fa fa-mobile" aria-hidden="true"></i> USSD </div>
+                    <div class="ui label"> <i class="fa fa-credit-card" aria-hidden="true"></i> Visa  </div>
+                    <div class="ui label"> M-Pesa </div>
+                    <div class="ui label"> Mobile Money </div>
+                    <div class="ui label"> <i class="fa fa-building" aria-hidden="true"></i> Bank Account </div>
+                    <div class="ui label"> <i class="fa fa-credit-card" aria-hidden="true"></i> Debit and Credit Cards </div>
+                </div>
+            </center>
+        </div>
+    </div>
+    <div class="ui vertical segment mt-0 container-fluid" id="description">
+        <center> <a class="ui positive button" onclick="tidioChatApi.open();"> Inquire About Service  </a> </center> <br>
+        <div class="ui middle aligned stackable grid container">
+            <div class="row">
+                <div class="eight wide column pl-5 pt-5">
+                    <h3 class=""> About Service </h3>
+                    <p> {{ servicez['Comment'] }} </p>
+                    <h3 class=""> Description </h3>
+                    <div class="text-dark bg-light"> {{ servicez['Description'] | safe }} </div>
+                </div>
+                <div class="six wide right floated column shadow">
+                    <img src="data:image/png;base64, {{ servicez['Featured_Image'] }}" height="250" width="300" class="ui large bordered rounded image">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if servicez['Details'] != 'None' %}
+        {{ servicez['Details'] | safe }}
+    {% endif %}
+    <script>
+        $( document ).ready(function() {
+            $.ajax({
+                url: 'http://www.geoplugin.net/json.gp',
+                method: 'GET',
+                success: function(data) {
+                    var resp = JSON.parse(data);
+                    var currency = resp['geoplugin_currencyCode'];
+                    var xchange = parseInt($('.monthly').text());
+                    var local = resp['geoplugin_currencyConverter']*xchange;
+                    $('.monthly').html(currency);
+                    $('.currency').html(local.toFixed(1)).digits();
+                    $('.flagz').addClass(resp['geoplugin_countryCode'].toLowerCase()+' flag')
+                    return local;
+                }
+            });
+            var xchange = $('.currency').text();
+            document.title = "{{ servicez['Title'] }} - Appfrican";
+            $.fn.digits = function(){ 
+                return this.each(function(){ 
+                    $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") ); 
+                })
+            }
+            $("span.numbers").digits();
+        });
+    </script>
+{% endif %}
+
+<!-- Scripts -->
+<script src="../../../static/front/js/jquery.min.js"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
+<script src="../../../static/front/js/popper.min.js"></script> <!-- Popper tooltip library for Bootstrap -->
+<script src="../../../static/front/js/bootstrap.min.js"></script> <!-- Bootstrap framework -->
+<script src="../../../static/front/js/jquery.easing.min.js"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
+<script src="../../../static/front/js/swiper.min.js"></script> <!-- Swiper for image and text sliders -->
+<script src="../../../static/front/js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
+<script src="../../../static/front/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
+<script src="../../../static/front/js/scripts.js"></script> <!-- Custom scripts -->
+<script src="{{ url_for('static', filename='semantic.min.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,391 @@
+
+{% include 'frontpage/layout/header.html' %}
+
+    <!-- Header -->
+    <header id="header" class="header">
+        <div class="header-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-xl-5">
+                        <div class="text-container">
+                            <h1> The best platform to empower your <br>
+                                <span id="typer"> </span> </h1>
+                            <p class="p-large">Use Appfrican to unify your business management. Empower your business with our various services.</p>
+                            <a class="btn-solid-lg page-scroll" href="/auth/signup">SIGN UP</a>
+                            <a class="btn-solid-lg btn-white text-primary" href="/contact#contact_form">Speak to Us </a>
+                        </div> <!-- end of text-container -->
+                    </div> <!-- end of col -->
+                    <div class="col-lg-6 col-xl-7">
+                        <div class="image-container">
+                            <div class="img-wrapper">
+                                <img class="img-fluid shadow" src="../../static/01.png" alt="alternative">
+                            </div> <!-- end of img-wrapper -->
+                        </div> <!-- end of image-container -->
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of container -->
+        </div> <!-- end of header-content -->
+    </header> <!-- end of header -->
+    <script>
+        var typed = new Typed('#typer', {
+            strings: ['-','eStore','Restaurant', 'Company','Charity','ICT','Blog','Sales'],
+            typeSpeed: 0,
+            backSpeed: 0,
+            smartBackspace: true, // this is a default
+            loop: true
+        });
+    </script>
+    <svg class="header-frame" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1920 310"><defs><style>.cls-1{fill:#5f4def;}</style></defs><title>header-frame</title><path class="cls-1" d="M0,283.054c22.75,12.98,53.1,15.2,70.635,14.808,92.115-2.077,238.3-79.9,354.895-79.938,59.97-.019,106.17,18.059,141.58,34,47.778,21.511,47.778,21.511,90,38.938,28.418,11.731,85.344,26.169,152.992,17.971,68.127-8.255,115.933-34.963,166.492-67.393,37.467-24.032,148.6-112.008,171.753-127.963,27.951-19.26,87.771-81.155,180.71-89.341,72.016-6.343,105.479,12.388,157.434,35.467,69.73,30.976,168.93,92.28,256.514,89.405,100.992-3.315,140.276-41.7,177-64.9V0.24H0V283.054Z"/></svg>
+    <!-- end of header -->
+    
+    <!-- Description -->
+    <div class="cards-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="above-heading"> Unleash your Growth Potential </div>
+                    <h2 class="h2-heading">Conviniently track, monitor and manage your business activities in one place, in real time </h2>
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Card -->
+                    <div class="card">
+                        <div class="card-image pt-2">
+                            <i class="fa fa-cogs fa-4x" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title"> Multiple Services </h4>
+                            <p class="container"> With our scalable platform and dedicated team, Appfrican continuosly integrates new features and services to better manage your businesses </p>
+                        </div>
+                    </div>
+                    <!-- end of card -->
+                    <!-- Card -->
+                    <div class="card">
+                        <div class="card-image pt-2">
+                            <i class="fas fa-chart-line fa-4x"></i>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title"> Intuitive Dashboard </h4>
+                            <p class="container"> Get reports and analytics to better make business decisions and help maximize your profits. We provide intuitive reports and stats to give you an overview on each service. </p>
+                        </div>
+                    </div>
+                    <!-- end of card -->
+                    <!-- Card -->
+                    <div class="card">
+                        <div class="card-image pt-2">
+                            <i class="fas fa-user-shield fa-4x"></i>
+                            <i class="fa fa-shield fa-4x" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title"> Security </h4>
+                            <p class="container"> Our platform is adherent to the standard information security policies and its closely monitored and upgraded. We seek to exceed the industry standard. </p>
+                        </div>
+                    </div>
+                    <!-- end of card -->
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </div> <!-- end of cards-1 -->
+    <!-- end of description -->
+    <!-- Features -->
+<div id="features" class="tabs">
+    <div class="container pt-2">
+        <div class="row" id="feat">
+            <div class="col-lg-12">
+                <div class="above-heading">FEATURES</div>
+                <h2 class="h2-heading"> One platform, Infinite Possibilities </h2>
+                <p class="p-heading">Take your business strategy to the next level and automatize several tasks save time and money. All services on Appfrican can be set up easily in <i class="text-success"> Minutes </i>. </p>
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Tabs Links -->
+                <ul class="nav nav-tabs" id="argoTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="nav-tab-1" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true"> <i class="fas fa-list"></i> For Executives </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-tab-2" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false"><i class="fas fa-envelope-open-text"></i> For Finance </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-tab-3" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false"><i class="fas fa-chart-bar"></i>For ICT </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-tab-3" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false"><i class="fas fa-chart-bar"></i>For Freelancers </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-tab-3" data-toggle="tab" href="#tab-5" role="tab" aria-controls="tab-5" aria-selected="false"><i class="fas fa-chart-bar"></i>For Content Creators </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-tab-3" data-toggle="tab" href="#tab-6" role="tab" aria-controls="tab-5" aria-selected="false"><i class="fas fa-chart-bar"></i>For Education </a>
+                    </li>
+                </ul>
+                <!-- end of tabs links -->
+                <!-- Tabs Content -->
+                <div class="tab-content" id="argoTabsContent">
+                    <!-- Tab -->
+                    <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="tab-1">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="image-container">
+                                    <img class="img-fluid" src="../../static/front/images/executives.png" alt="alternative">
+                                </div>
+                            </div> <!-- end of col -->
+                            <div class="col-lg-6">
+                                <div class="text-container">
+                                    <h3> Appfrican Platform for Business </h3>
+                                    <p> We have several services included for executives. These will help you manage your business and supervise better. </p>
+                                    <ul class="list-unstyled li-space-lg">
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Customer Relations Management </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Expense Management  </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Inventory Management </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Project Management </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> and more .... </div>
+                                        </li>
+                                    </ul>
+                                    <a class="btn-solid-reg" href="/auth/signup"> Sign up </a>
+                                </div> <!-- end of text-container -->
+                            </div> <!-- end of col -->
+                        </div> <!-- end of row -->
+                    </div> <!-- end of tab-pane -->
+                    <!-- end of tab -->
+
+                    <!-- Tab -->
+                    <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="tab-2">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="image-container">
+                                    <img class="img-fluid" src="../../static/front/images/finance.png" alt="alternative">
+                                </div> <!-- end of image-container -->
+                            </div> <!-- end of col -->
+                            <div class="col-lg-6">
+                                <div class="text-container">
+                                    <h3> For Finance </h3>
+                                    <p> Take better control of your finances for startups, SMEs and Freelance work with various tools on the platform </p>
+                                    <ul class="list-unstyled li-space-lg">
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Expenses Management  </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Payroll and Accounting </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Sales and PoS </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> and more ..... </div>
+                                        </li>
+                                    </ul>
+                                    <a class="btn-solid-reg" href="/auth/signup"> Sign up </a>
+                                </div> <!-- end of text-container -->
+                            </div> <!-- end of col -->
+                        </div> <!-- end of row -->
+                    </div> <!-- end of tab-pane -->
+                    <!-- end of tab -->
+
+                    <!-- Tab -->
+                    <div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="tab-3">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="image-container">
+                                    <img class="img-fluid" src="../../static/front/images/ict.png" alt="alternative">
+                                </div> <!-- end of image-container -->
+                            </div> <!-- end of col -->
+                            <div class="col-lg-6">
+                                <div class="text-container">
+                                    <h3> For ICT </h3>
+                                    <p> Manage ICT Services for each businesses with ease. </p>
+                                    <ul class="list-unstyled li-space-lg">
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Website and Hosting Services </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Mobile App Deployment </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> VPS Management </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> and more ... </div>
+                                        </li>
+                                    </ul>
+                                    <a class="btn-solid-reg" href="/auth/signup"> Sign up </a>
+                                </div> <!-- end of text-container -->
+                            </div> <!-- end of col -->
+                        </div> <!-- end of row -->
+                    </div> <!-- end of tab-pane -->
+                    <!-- end of tab -->
+
+                    <!-- Tab -->
+                    <div class="tab-pane fade" id="tab-4" role="tabpanel" aria-labelledby="tab-4">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="image-container">
+                                    <img class="img-fluid" src="../../static/front/images/freelancer.png" alt="alternative">
+                                </div> <!-- end of image-container -->
+                            </div> <!-- end of col -->
+                            <div class="col-lg-6">
+                                <div class="text-container">
+                                    <h3> For Freelancers </h3>
+                                    <p> Empower your freelance services with our professional services </p>
+                                    <ul class="list-unstyled li-space-lg">
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Online Portfolio </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Customer Relations Management  </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> and more ... </div>
+                                        </li>
+                                    </ul>
+                                    <a class="btn-solid-reg" href="/auth/signup"> Sign up </a>
+                                </div> <!-- end of text-container -->
+                            </div> <!-- end of col -->
+                        </div> <!-- end of row -->
+                    </div> <!-- end of tab-pane -->
+                    <!-- end of tab -->
+
+                    <!-- Tab -->
+                    <div class="tab-pane fade" id="tab-5" role="tabpanel" aria-labelledby="tab-5">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="image-container">
+                                    <img class="img-fluid" src="../../static/front/images/blogger.png" alt="alternative">
+                                </div> <!-- end of image-container -->
+                            </div> <!-- end of col -->
+                            <div class="col-lg-6">
+                                <div class="text-container">
+                                    <h3> For Content Creators </h3>
+                                    <p> Allow our platform to manage the backend tasts and let you focus on creativity. Our professional tools will guarantee reaching a larger audience. </p>
+                                    <ul class="list-unstyled li-space-lg">
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> News and Blog </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Mobile Apps </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Monetization </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> and more ... </div>
+                                        </li>
+                                    </ul>
+                                    <a class="btn-solid-reg" href="/auth/signup"> Sign up </a>
+                                </div> <!-- end of text-container -->
+                            </div> <!-- end of col -->
+                        </div> <!-- end of row -->
+                    </div> <!-- end of tab-pane -->
+                    <!-- end of tab -->
+
+                    <!-- Tab -->
+                    <div class="tab-pane fade" id="tab-6" role="tabpanel" aria-labelledby="tab-6">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="image-container">
+                                    <img class="img-fluid" src="../../static/front/images/classroom.png" alt="alternative">
+                                </div> <!-- end of image-container -->
+                            </div> <!-- end of col -->
+                            <div class="col-lg-6">
+                                <div class="text-container">
+                                    <h3> For Education </h3>
+                                    <p> Students, teachers, universities can be able to migrate to a digital platform and increase reach and engagement. </p>
+                                    <ul class="list-unstyled li-space-lg">
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> eLearning </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> Forums </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body"> and more ... </div>
+                                        </li>
+                                    </ul>
+                                    <a class="btn-solid-reg" href="/auth/signup"> Sign up </a>
+                                </div> <!-- end of text-container -->
+                            </div> <!-- end of col -->
+                        </div> <!-- end of row -->
+                    </div> <!-- end of tab-pane -->
+                    <!-- end of tab -->
+                    
+                </div> <!-- end of tab content -->
+                <!-- end of tabs content -->
+
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</div> <!-- end of tabs -->
+<!-- end of features -->
+
+    <!-- Details -->
+    <div id="details" class="basic-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="text-container">
+                        <h2> One platform, Infinite Possibilities </h2>
+                        <p> Empower your business with the various services that are included in the platform. From billing management, 
+                            invoicing, financial complaince, human resources, customer management, website and mobile apps, 
+                            and so much more. </p>
+                        <ul class="list-unstyled li-space-lg">
+                            <li class="media">
+                                <i class="fas fa-square"></i>
+                                <div class="media-body"> Signup and get instant access to Dashboard  </div>
+                            </li>
+                            <li class="media">
+                                <i class="fas fa-square"></i>
+                                <div class="media-body"> Create your first Business </div>
+                            </li>
+                            <li class="media">
+                                <i class="fas fa-square"></i>
+                                <div class="media-body"> Select a service and add it to your business. </div>
+                            </li>
+                        </ul>
+                        <a class="btn-solid-reg" href="/auth/signup">SIGN UP</a>
+                    </div> <!-- end of text-container -->
+                </div> <!-- end of col -->
+                <div class="col-lg-6">
+                    <div class="image-container">
+                        <img class="img-fluid" src="../../static/front/images/details.png" alt="alternative">
+                    </div> <!-- end of image-container -->
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </div> <!-- end of basic-1 -->
+    <!-- end of details -->
+
+    {% include 'frontpage/layout/footer.html' %}

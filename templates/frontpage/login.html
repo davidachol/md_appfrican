@@ -1,0 +1,168 @@
+{% include 'frontpage/layout/header.html' %}
+    <div class="ui page dimmer">
+        <div class="content">
+        Loggin In 
+        </div>
+    </div>
+    <!-- Header -->
+    <header id="header" class="ex-2-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Log In</h1>
+                   <p>You don't have a password? Then please <a class="text-dark" href="/auth/signup">Sign Up</a></p> 
+                    <!-- Sign Up Form -->
+                    <div class="form-container">
+                        <div class="ui message">
+                            Fill in details to Login 
+                        </div>
+                        <form id="logInForm" action="" method="POST" data-focus="false">
+                            <div class="form-group">
+                                <input type="email" name="email" class="form-control-input" id="lemail" required>
+                                <label class="label-control" for="lemail">Email</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password" class="form-control-input" id="lpassword" required>
+                                <label class="label-control" for="lpassword">Password</label>
+                            </div>
+                            <div class="">
+                                <!-- Button trigger modal -->
+                                <a class="float-right" data-toggle="modal" data-target="#modelId">
+                                  Forgot Password
+                                </a> <br>
+                                
+                                <!-- Modal -->
+                                <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Modal title</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="reset_response">
+
+                                                </div>
+                                                <form action="" class="ui form">
+                                                    <div class="form-group">
+                                                      <label for=""></label>
+                                                      <input type="email" placeholder="Email" class="form-control" name="" id="reset_email" aria-describedby="emailHelpId" placeholder="">
+                                                      <small id="emailHelpId" class="text-left form-text text-muted">  Enter your email address </small>
+                                                    </div>
+                                                    <button type="button" id="pass_reset" class="btn btn-success"> Reset Password </button>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="" class="text-white"> Forgot Password </a>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" name="submit" id="login_btn" class="form-control-submit-button" value="Login">
+                            </div>
+                        </form>
+                    </div> <!-- end of form container -->
+                    <!-- end of sign up form -->
+
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </header> <!-- end of ex-header -->
+    <!-- end of header -->
+
+    <!-- Scripts -->
+    <script src="../../static/front/js/jquery.min.js"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
+    <script src="../../static/front/js/popper.min.js"></script> <!-- Popper tooltip library for Bootstrap -->
+    <script src="../../static/front/js/bootstrap.min.js"></script> <!-- Bootstrap framework -->
+    <script src="../../static/front/js/jquery.easing.min.js"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
+    <script src="../../static/front/js/swiper.min.js"></script> <!-- Swiper for image and text sliders -->
+    <script src="../../static/front/js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
+    <script src="../../static/front/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
+    <script src="../../static/front/js/scripts.js"></script> <!-- Custom scripts -->
+    <script src="../../static/semantic.min.js"></script>
+    <script>
+        $('#pass_reset').on('click', function() {
+            event.preventDefault();
+            var reset_email = $('#reset_email').val();
+            if (reset_email != '') {
+                $.ajax({
+                    url: '/auth/reset_password',
+                    method: 'POST',
+                    data: {
+                        'email': reset_email
+                    },
+                    error: function (data) {
+                        $('.reset_response').html('<div class="alert alert-danger" role="alert"> \
+                            <strong>Please enter a valid email address </strong> \
+                        </div>');
+                    },
+                    beforeSend: function() {
+                        $('.ui.dimmer').dimmer('show');
+                    },
+                    complete: function() {
+                        $('.ui.dimmer').dimmer('hide');
+                    },
+                    success: function (data) {
+                        if (data.status == 'success') {
+                            $('.reset_response').html('<div class="alert alert-success" role="alert"> \
+                                <strong> A password reset code has been sent to your email </strong> \
+                            </div>');
+                        }
+                        else {
+                            $('.reset_response').html('<div class="alert alert-danger" role="alert"> \
+                                <strong>Please enter a valid email address </strong> \
+                            </div>');
+                            $('.ui.message').html("There was an error, Please Try Again");
+                        }
+                    }
+                })
+            }
+            else {
+                $('.reset_response').html('<div class="alert alert-danger" role="alert"> \
+                    <strong>Please enter a valid email address </strong> \
+                </div>');
+            }
+        })
+        $('#login_btn').on('click', function() {
+            event.preventDefault();
+            var email = $('#lemail').val();
+            var password = $('#lpassword').val();
+            if ((email != '') && (password != '')) {
+                $.ajax({
+                    url: '/auth/login',
+                    method: 'POST',
+                    data: {
+                        'email': email,
+                        'password': password
+                    },
+                    beforeSend: function() {
+                        $('.ui.dimmer').dimmer('show');
+                    },
+                    complete: function() {
+                        $('.ui.dimmer').dimmer('hide');
+                    },
+                    success: function (data) {
+                        var status = data.status;
+                        if (status == 'success') {
+                            window.location = '/dashboard';
+                        }
+                        else if (status == 'error') {
+                            $('.ui.message').addClass('error');
+                            $('.ui.message').html(data.message);
+                        }
+                    },
+                    error: function() {
+                        $('.ui.message').addClass('error');
+                        $('.ui.message').html("There was an error, Please Try Again");
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<div class="ui container shadow-lg">
+    {% if status == 'installing' %}
+        <div class="ui grid stackable padded">
+            <div class="column">
+                <div class="jumbotron bg-light text-center shadow-lg">
+                    <h1 class="display-3"> <i class="fas fa-smile-wink fa-2x"></i> </h1>
+                    <p class="lead"> The VPS is still installing. Please refresh after a few minutes  </p>
+                    <hr class="my-2">
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="ui row pt-5 pb-5">
+            <div class="col-sm-3">
+                <div class="ui vertical menu">
+                    <a class="active teal item">
+                        My Server
+                    </a>
+                    <button class="item" type="button" data-toggle="modal" data-target="#graphmodal">
+                        Graph
+                    </button>
+                    <a class="item disabled" href="#">
+                        Start / Stop
+                        <div class="ui red left pointing label"> Coming Soon </div>
+                    </a>
+                    <a class="item disabled" href="#">
+                        Reboot
+                        <div class="ui red left pointing label"> Coming Soon </div>
+                    </a>
+                    <a class="item disabled" href="#">
+                        Change OS 
+                        <div class="ui red left pointing label"> Coming Soon </div>
+                    </a>
+                    <a href="{{vnc_console['result']['vnc_url']}}" target="__blank" class="item">
+                        Online Console
+                    </a>
+                    <a href="https://www.putty.org/" target="__blank" class="item">
+                        Download Putty
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="ui row">
+                    <div class="col-sm-6">
+                        <table class="ui table">
+                            <tr>
+                                <th colspan="2" class="text-primary"> Server Details </th>
+                            </tr>
+                            <tr>
+                                <td> VPS ID </td>
+                                <td> BASIC-{{ vps['vps_id'] }} </td>
+                            </tr>
+                            <tr>
+                                <td> Uptime </td>
+                                <td> {{response['uptime_text']}} </td>
+                            </tr>
+                            <tr>
+                                <td> Disk Usage </td>
+                                <td> {{response['disk_usage_text']}} </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-6">
+                        <table class="ui table">
+                            <tr>
+                                <th colspan="2" class="text-primary"> Server Usage </th>
+                            </tr>
+                            <tr>
+                                <td> CPU Usage </td>
+                                <td> {{ response['cpu_usage'] }} </td>
+                            </tr>
+                            <tr>
+                                <td> Disk Size (GB) </td>
+                                <td> {{response['disk']}} </td>
+                            </tr>
+                            <tr>
+                                <td> Bandwidth (TB) </td>
+                                <td> {{response['bandwidth']}} </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <table class="ui table">
+                        <tr>
+                            <th colspan="4" class="text-primary"> Other Details </th>
+                        </tr>
+                        <tr>
+                            <td> Status </td>
+                            <td> {{ response['vm_status'] }} </td>
+                            <td> IP Address </td>
+                            <td> {{ response['ip'] }} </td>
+                        </tr>
+                        <tr>
+                            <td> RAM Usage </td>
+                            <td> {{ response['ram_usage_text'] }} </td>
+                            <td> {{ vps['ip'] }} </td>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <td> Password </td>
+                            <td> {{ response['install_root'] }} </td>
+                            <td>  </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>  </td>
+                            <td> </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="modal fade" id="graphmodal" tabindex="-1" role="dialog" aria-labelledby="graphmodallabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="graphmodallabel">Usage Graph</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4> CPU Usage in last Hour </h4>
+                    {{ cpu_img | safe }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>

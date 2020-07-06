@@ -1,0 +1,227 @@
+{% include 'dashboard/layout/header.html' %}
+
+<div class="ui top attached tabular menu  container ml-5 mr-5">
+    <a class="active item" data-tab="first"> User Profile </a>
+    <a class="item" data-tab="second"> Security </a>
+    <a class="item" data-tab="third"> Data Management </a>
+</div>
+<div class="container ui bottom attached tab segment active" data-tab="first">
+    <center>
+        <i class="fa fa-user fa-5x image-rounded" aria-hidden="true"></i> <br>
+    <table class="ui container table shadow-lg">
+        <tr>
+            <th> Name </th>
+            <td> {{ prof['Name'] }} </td>
+        </tr>
+        <tr>
+            <th> Email </th>
+            <td> {{ prof['Email'] }} </td>
+        </tr>
+        <tr>
+            <th> Country </th>
+            <td> {{ prof['Country'] }} </td>
+        </tr>
+        <tr>
+            <th> Currency </th>
+            <td> {{ prof['Currency'] }} <button type="button" class="ui button basic border border-dark" data-toggle="modal" data-target="#modelId"> Change </button>  </td>
+        </tr>
+        <tr>
+            <th> Created On </th>
+            <td> {{ prof['Date'] }} </td>
+        </tr>
+    </table>
+    </center>
+    <!-- Modal -->
+    <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" class="ui form">
+                        <div class="ui message warning">
+                            Changing Currency will change your default payment gateway.
+                        </div>
+                        <div class="field">
+                            <label for=""> Currencies </label>
+                            <select name="" id="currency_select" class="ui dropdown search">
+                                {% for currency in currencies %}
+                                    <option value="{{ currency['ToCurrency'] }}"> {{currency['ToCurrency']}} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button class="ui button secondary" id="change_btn"> Change Default Currency </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container ui bottom attached tab segment" data-tab="second">
+    <div id="change_password">
+
+    </div>
+    <form action="" class="ui form container">
+        <div class="field">
+            <label> Current Password </label>
+            <input id="current" name="current" required type="password" placeholder="Current Password">
+        </div>
+        <div class="field">
+            <label> New Password </label>
+            <input id="new_password" name="new_password" required type="password" placeholder="New Password">
+        </div>
+        <div class="field">
+            <label> Confirm </label>
+            <input id="confirm" name="confirm" required placeholder="Confirm Password" type="password">
+        </div>
+        <button id="change_pass_btn" class="ui button secondary"> Change Password </button>
+    </form>
+    <script>
+        $('#change_btn').on('click', function() {
+            event.preventDefault();
+            var currency = $('#currency_select option:selected').text();
+            $.ajax({
+                url: '/profile/change_currency',
+                method: 'POST',
+                data: {
+                    'currency': currency
+                },
+                beforeSend: function() {
+                    $('.ui.page.dimmer').dimmer('show');
+                },
+                complete: function() {
+                    $('.ui.page.dimmer').dimmer('hide');
+                }
+            }).done(function(data) {
+                window.location = '/profile';
+            });
+        });
+        $('#change_pass_btn').on('click', function() {
+            event.preventDefault();
+            var current = $('#current').val();
+            var new_password = $('#new_password').val();
+            var confirm = $('#confirm').val();
+            if ((current != '') && (new_password != '') && (confirm != '')) {
+                if (new_password == confirm) {
+                    $.ajax({
+                        url: '/profile/change_password',
+                        method: 'POST',
+                        data: {
+                            'current': current,
+                            'new': new_password
+                        },
+                        beforeSend: function() {
+                            $('.ui.page.dimmer').dimmer('show');
+                        },
+                        complete: function () {
+                            $('.ui.page.dimmer').dimmer('hide');
+                        }
+                    }).done(function (data) {
+                        console.log(data);
+                        var status = data['status']
+                        if (status == 'success') {
+                            var success= '<div class="ui positive message"> \
+                            <i class="close icon"></i> \
+                            <div class="header"> \
+                                Your New Password has been saved successful \
+                            </div> \
+                            <p> Congratulations </p> \
+                            </div>';
+                            $('#change_password').html(success);
+                        }
+                        else if (status == 'error') {
+                            var error = '<div class="ui negative message"> \
+                            <i class="close icon"></i> \
+                            <div class="header"> \
+                                Your password did not match with any in our database \
+                            </div> \
+                            <p> Please Review the information you have entered </p> \
+                            </div>';
+                            $('#change_password').html(error);
+                        }
+                    }).fail(function() {
+                            var error = '<div class="ui negative message"> \
+                            <i class="close icon"></i> \
+                            <div class="header"> \
+                                The New Password You have entered does not match \
+                            </div> \
+                            <p> Please Review the information you have entered </p> \
+                            </div>';
+                            $('#change_password').html(error); 
+                        }
+                    );
+                }
+                else {
+                    var error = '<div class="ui negative message"> \
+                        <i class="close icon"></i> \
+                        <div class="header"> \
+                            The New Password You have entered does not match \
+                        </div> \
+                        <p> Please Review the information you have entered </p> \
+                        </div>';
+                    $('#new_password').addClass('border border-danger');
+                    $('#confirm').addClass('border border-danger');
+                    $('#change_password').html(error);
+                }
+            }
+            else {
+                var error = '<div class="ui negative message"> \
+                        <i class="close icon"></i> \
+                        <div class="header"> \
+                            Please fill in the form with the right information to change your password \
+                        </div> \
+                        <p> Please Review the information you have entered </p> \
+                        </div>';
+                $('#change_password').html(error);
+                $('#current').addClass('border border-danger');
+                $('#new_password').addClass('border border-danger');
+                $('#confirm').addClass('border border-danger');
+            }
+        });
+    </script>
+</div>
+<div class="container ui bottom attached tab segment" data-tab="third">
+    <div class="ui container-fluid">
+        <h1> Request Profile Data </h1>
+        <div id="response">
+
+        </div>
+        <p> This process can take upto 7 business days and an attachment to your email </p>
+        <button id="request_data" class="ui button secondary"> Request Profile Data </button>
+    </div>
+    <script>
+        $('#request_data').on('click', function () {
+            event.preventDefault();
+            var message = $('#message').val();
+            if (message != '') {
+                $.ajax({
+                    url: '/profile/request_data',
+                    method: 'GET',
+                    beforeSend: function() {
+                        $('.ui.page.dimmer').dimmer('show');
+                    },
+                    complete: function () {
+                        $('.ui.page.dimmer').dimmer('hide');
+                    },
+                    success: function(data) {
+                        var resp = '<div class="ui message positive"> \
+                            Your request has been recieved and will be responded to as soon as possible to your email. Thank You\
+                            </div>';
+                        $('#response').html(resp);
+                    }
+                });
+            }
+        });
+    </script>
+</div>
+<script>
+    $('.menu .item').tab();
+</script>
+{% include 'dashboard/layout/footer.html' %}

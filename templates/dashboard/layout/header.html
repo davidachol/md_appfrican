@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
+<script src="../../../static/pace.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/image-picker/0.3.1/image-picker.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/image-picker/0.3.1/image-picker.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+<title> Dashboard </title>
+<link rel="icon" href="../../static/favicon.ico">
+<style>
+    /* body {
+        background-image: url("https://image.ibb.co/de6JzG/bitmap_1_1.png");
+        background-size:cover;
+        background-repeat:no-repeat;
+        background-position: center;
+    } */
+    a.nav-link {
+        padding-top: 5;
+        padding-bottom: 5;
+    }
+    a.nav-link:hover {
+        background-color: rgb(62, 62, 195);
+        color: white;
+    }
+</style>
+<style>
+    .pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background: #29d;
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  right: 100%;
+  width: 100%;
+  height: 2px;
+}
+
+.pace .pace-progress-inner {
+  display: block;
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 100%;
+  box-shadow: 0 0 10px #29d, 0 0 5px #29d;
+  opacity: 1.0;
+  -webkit-transform: rotate(3deg) translate(0px, -4px);
+  -moz-transform: rotate(3deg) translate(0px, -4px);
+  -ms-transform: rotate(3deg) translate(0px, -4px);
+  -o-transform: rotate(3deg) translate(0px, -4px);
+  transform: rotate(3deg) translate(0px, -4px);
+}
+
+.pace .pace-activity {
+  display: block;
+  position: fixed;
+  z-index: 2000;
+  top: 15px;
+  right: 15px;
+  width: 14px;
+  height: 14px;
+  border: solid 2px transparent;
+  border-top-color: #29d;
+  border-left-color: #29d;
+  border-radius: 10px;
+  -webkit-animation: pace-spinner 400ms linear infinite;
+  -moz-animation: pace-spinner 400ms linear infinite;
+  -ms-animation: pace-spinner 400ms linear infinite;
+  -o-animation: pace-spinner 400ms linear infinite;
+  animation: pace-spinner 400ms linear infinite;
+}
+
+@-webkit-keyframes pace-spinner {
+  0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@-moz-keyframes pace-spinner {
+  0% { -moz-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -moz-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@-o-keyframes pace-spinner {
+  0% { -o-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -o-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@-ms-keyframes pace-spinner {
+  0% { -ms-transform: rotate(0deg); transform: rotate(0deg); }
+  100% { -ms-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@keyframes pace-spinner {
+  0% { transform: rotate(0deg); transform: rotate(0deg); }
+  100% { transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light fxed-top jusify-content-start shadow-lg" style="background-color: rgb(62, 62, 195);">
+        <div class="float-left">
+            <div class="dropdown open navbar-brand">
+                <button class="btn dropdown-toggle text-white" type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                            {% if 'select_biz' in session %}
+                                {# session['select_biz']['Name'] #}
+                            {% endif %}
+                            Businesses
+                        </button>
+                <div class="dropdown-menu" style="background-color: rgb(62, 62, 195);" aria-labelledby="triggerId">
+                    {% if session['biz']: %}
+                        {% for b in session['biz'] %}
+                            <a class="dropdown-item text-white" href="/business/view/{{ set_token(b['id']) }}"> {{ b['Name'] }} </a>
+                        {% endfor %}
+                    {% else %}
+                        
+                    {% endif %}
+                    <hr>
+                    <a href="/business/add" class="dropdown-item text-white btn btn-dark"> Add Business </a>
+                </div>
+            </div>
+            <a class="navbar-brand text-white" href="#">  </a>
+        </div>
+        <button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/dashboard"> <i class="fa fa-home" aria-hidden="true"></i> </a>
+                </li>
+                    <li class="nav-item">
+                        {% if 'select_biz' not in session %}
+                            <a class="nav-link text-white" href="/business/add"> Business </a>
+                        {% else %}
+                            {% if not session['select_biz']['id']: %}
+                                <a class="nav-link text-white" href="/business/add"> Business </a>
+                            {% else %}
+                                <a class="nav-link text-white" href="/business/view/{{ set_token(session['select_biz']['id']) }}">  {{session['select_biz']['Name']}} </a>
+                            {% endif %}
+                        {% endif %}
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/service"> Services </a>
+                </li>
+            </ul>
+            <div class="float-right form-inline">
+                <div class="dropdown open">
+                    <a class="nav-link text-white dropdown-toggle" type="button" id="alerts" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <i class="fa fa-bell" aria-hidden="true">
+                                <span class="badge badge-light"> {{ session['alert_badge'] }} </span>
+                            </i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="alerts">
+                        {% if 'alerts' in session %}
+                            {% for alert in session['alerts'] %}
+                                <div class="ui feed dropdown-item">
+                                    {% if alert['Status'] == 0 %}
+                                        <div class="event">
+                                            <div class="label">
+                                                <i class="blue bell icon"></i>
+                                            </div>
+                                            <div class="content">
+                                            <div class="text-primary date">
+                                                {{ alert['Date'] }}
+                                            </div>
+                                            <div class="summary">
+                                                <a href="/alert/view/{{set_token(alert['id'])}}" class="text-primary"> {{ alert['Kind'] }} on <strong> {{ alert['Title'] }} </strong> for <strong> {{ alert['Name'] }} </strong> </a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="event">
+                                            <div class="label">
+                                                <i class="black bell icon"></i>
+                                            </div>
+                                            <div class="content">
+                                            <div class="black date">
+                                                {{ alert['Date'] }}
+                                            </div>
+                                            <div class="summary">
+                                                <a href="/alert/view/{{set_token(alert['id'])}}"  class="text-dark"> {{ alert['Kind'] }} on <strong> {{ alert['Title'] }} </strong> for <strong> {{ alert['Name'] }} </strong> </a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <a href="/alert" class="ui button btn-block primary"> View More </a>
+                    </div>
+                </div>
+                <a href="/bills" class="nav-link text-white"> <i class="fas fa-money-bill"></i> </a>
+                <div class="dropdown open navbar-brand">
+                    <button class="btn dropdown-toggle text-white" type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                            </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="triggerId">
+                        <a class="dropdown-item" href="/profile">Profile</a>
+                        <a href="/profile/affiliate" class="dropdown-item"> Affiliate </a>
+                        <a class="dropdown-item" href="/auth/logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% if session['verify_pending'] == True %}
+        <div class="ui container-fluid icon message negative">
+            <i class="envelope icon"></i>
+            <div class="content">
+              <div class="header">
+                Your account is not yet verified
+              </div>
+              <p> Please Check your email address to verify your account. </p>
+            </div>
+          </div>
+    {% endif %}
+    <!-- <hr> -->
+    <div class="ui page dimmer">
+        <div class="content">
+         Loading 
+        </div>
+    </div>

@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Welcome </title>
+    <style>
+        body {
+            background-color: white;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+</head>
+<body>
+    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td align="center">
+                <table class="col-600" width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tbody><tr>
+                        <td align="center" valign="top" background="https://designmodo.com/demo/emailtemplate/images/header-background.jpg" bgcolor="#66809b" style="background-size:cover; background-position:top;height=" 400""="">
+                            <table class="col-600" width="600" height="400" border="0" align="center" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                <tr>
+                                    <td height="40"></td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="line-height: 0px;">
+                                        <h1 style="color: white;"> Appfrican   </h1> 
+                                        <!-- <img style="display:block; line-height:0px; font-size:0px; border:0px;" src="https://designmodo.com/demo/emailtemplate/images/logo.png" width="109" height="103" alt="logo"> -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="font-family: 'Raleway', sans-serif; font-size:37px; color:#ffffff; line-height:24px; font-weight: bold; letter-spacing: 7px;">
+                                        <span style="font-family: 'Raleway', sans-serif; font-size:37px; color:#ffffff; line-height:39px; font-weight: 300; letter-spacing: 7px;"> WELCOME </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="font-family: 'Lato', sans-serif; font-size:15px; color:#ffffff; line-height:24px; font-weight: 300;">
+                                        Welcome to the Appfrican platform for business management. 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td height="50"></td>
+                                </tr>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <table class="col-600" width="600" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-left:20px; margin-right:20px; border-left: 1px solid #dbd9d9; border-right: 1px solid #dbd9d9;">
+                    <tbody><tr>
+                        <td height="35"></td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="font-family: 'Raleway', sans-serif; font-size:22px; font-weight: bold; color:#2a3a4b;"> Welcome {{ data['Name'] }} </td>
+                    </tr>
+                    <tr>
+                        <td height="10"></td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="font-family: 'Lato', sans-serif; font-size:14px; color:#757575; line-height:24px; font-weight: 300;">
+                            Your account will be fully set up after you verify your email address <br>
+                            <a href="https://appfrican.co/auth/email_verify/{{data['verification_code']}}" target="_blank" class="ui button"> Verify Your Email </a>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+            </tbody></table>
+</body>
+</html>

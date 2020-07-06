@@ -1,0 +1,291 @@
+{% include 'dashboard/layout/header.html' %}
+
+{% if page == '' %}
+    <div class="ui pointing menu">
+        <a class="active item">
+            Popular
+        </a>
+        {% for cat in categories %}
+            <a href="/service/category/{{cat['Category']}}" class="item"> {{ cat['Category'] }} </a>
+        {% endfor %}
+        <div class="right menu">
+            <div class="item">
+                <div class="ui transparent icon input disabled">
+                    <input type="text" placeholder="Search...">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+      </div>
+    <div class="ui container-fluid link cards">
+        {% for s in services %}
+            <div class="card shadow">
+                <a class="image" href="/service/overview/{{ set_token(s['id']) }}">
+                    {% if s['Featured_Image'] is not none %}
+                        <img src="data:image/png;base64, {{ str(base64.b64encode(s['Featured_Image']).decode("utf-8")) }}">
+                    {% else %}
+                        <img src="">
+                    {% endif %}
+                </a>
+                <div class="content">
+                  <div class="header"> <a class="header pt-4" href="/service/overview/{{ set_token(s['id']) }}"> {{ s['Title'] }} </a> </div>
+                  <div class="meta">
+                    <a> <span class="cinema"> {{ s['Subtitle'] }} </span> </a>
+                  </div>
+                  <div class="description">
+                        <p> {{ s['Comment']}} </p>
+                  </div>
+                </div>
+                <div class="extra content">
+                  <span class="right floated">
+                        <a href="/service/overview/{{ set_token(s['id']) }}" class="ui primary button"> View <i class="right chevron icon"></i> </a>
+                  </span>
+                  <span>
+                      {% if s['Kind'] == 'Free' %}
+                        <i class="text-success"> Free </i>
+                      {% elif s['Kind'] == 'Subscription' %}
+                        <i class="dollar sign icon text-success"></i> 
+                      {% endif %}
+                    <div class="ui label">{{ s['Category']}}</div>
+                  </span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% elif page == 'category' %}
+    <div class="ui pointing menu">
+        <a class="item" href="/service">
+            Popular
+        </a>
+        {% for cat in categories %}
+            {% if cat['Category'] == category %}
+                <a href="/service/category/{{cat['Category']}}" class="item active"> {{ cat['Category'] }} </a>
+            {% else %}
+                <a href="/service/category/{{cat['Category']}}" class="item"> {{ cat['Category'] }} </a>
+            {% endif %}
+        {% endfor %}
+        <div class="right menu">
+            <div class="item">
+                <div class="ui transparent icon input">
+                    <input type="text" placeholder="Search...">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+      </div>
+    <div class="ui container-fluid link cards">
+        {% for s in services %}
+            <div class="card shadow">
+                <a class="image" href="/service/overview/{{ set_token(s['id']) }}">
+                    {% if s['Featured_Image'] is not none %}
+                        <img src="data:image/png;base64, {{ str(base64.b64encode(s['Featured_Image']).decode("utf-8")) }}">
+                    {% else %}
+                        <img src="">
+                    {% endif %}
+                </a>
+                <div class="content">
+                  <div class="header"> <a class="header pt-4" href="/service/overview/{{ set_token(s['id']) }}"> {{ s['Title'] }} </a> </div>
+                  <div class="meta">
+                    <a> <span class="cinema"> {{ s['Subtitle'] }} </span> </a>
+                  </div>
+                  <div class="description">
+                        <p> {{ s['Comment']}} </p>
+                  </div>
+                </div>
+                <div class="extra content">
+                  <span class="right floated">
+                        <a href="/service/overview/{{ set_token(s['id']) }}" class="ui primary button"> View <i class="right chevron icon"></i> </a>
+                  </span>
+                  <span>
+                    {% if s['Kind'] == 'Free' %}
+                      <i class="text-success"> Free </i>
+                    {% elif s['Kind'] == 'Subscription' %}
+                      <i class="dollar sign icon green"></i> 
+                    {% endif %}
+                  <div class="ui label">{{ s['Category']}}</div>
+                </span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% elif page == 'overview' %}
+    <div class="jumbotron jumbotron-fluid text-white mb-0" style="background-color: rgb(62, 62, 195); ">
+        <div class="container">
+            <center>
+                <h1 class="display-3"> {{ servicez['Title'] }} </h1>
+                <p class="lead"> {{ servicez['Subtitle'] }} </p>
+                <hr class="my-2">
+            </center>
+            <p class="lead">
+                <center>
+                    {% if servicez['Kind'] == 'Free' %}
+                        <a href="/bills/free?service_id={{ set_token(servicez['id']) }}" class="ui huge positive button"> Install for Free </a>
+                    {% elif servicez['Kind'] == 'Subscription' %}
+                        <button type="button" class="ui huge secondary button" data-toggle="modal" data-target="#exampleModal">
+                            Install starting <span class="numbers"> {{ xrate(servicez['Monthly']) }} </span> {{ profile['currency'] }} Monthly
+                        </button>
+                        <p class="text-white"> <span class="numbers"> {{ (xrate(servicez['Monthly'])*12) }} </span> {{ profile['currency'] }} Per Year  </p>
+                            <!-- Modal -->
+                            <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel"> Select Payment Duration </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="" class="ui form pt-5 container">
+                                        <div class="field">
+                                            <label for=""> Duration for First Payment </label>
+                                            <select name="months" id="duration_select">
+                                                {% set min_dur = servicez['Minimum_Duration'] %}
+                                                {% set array = [1,2,3,4,5,6,7,8,9,10,11,12] %}
+                                                {% for each in array %}
+                                                    {% if loop.index < min_dur %}
+                                                    
+                                                    {% else %}
+                                                        <option value="{{loop.index}}"> {{loop.index}} Months </option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-lg shadow-lg btn-primary" onclick="process_pay()">
+                                            Pay 
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        <script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
+                        <script>
+                            var email = '{{ profile["email"] }}';
+                            var txref = '{{ profile["txref"] }}';
+                            var business_id = '{{ set_token(profile["business_id"]) }}';
+                            var service_id = '{{ set_token(profile["service_id"]) }}';
+                            var duration = $('#duration_select option:selected').val();
+                            var setup = parseInt('{{ servicez["Setup_cost"] }}');
+                            var monthly = parseInt('{{ servicez["Monthly"] }}');
+                            var currency = '{{ profile["currency"] }}';
+                            const API_publicKey = "FLWPUBK-5d6c87654e9e65b3b80da2c0f476c936-X";
+                            function process_pay() {
+                                event.preventDefault();
+                                var duration = parseInt($('#duration_select option:selected').val());
+                                var money = (parseInt(duration)*monthly)+setup;
+                                var converted = parseInt('{{ xrate(servicez["Setup_cost"]) }}')+(parseInt('{{xrate(servicez["Monthly"])}}')*duration);
+                                console.log(duration);
+                                console.log(money);
+                                console.log(converted);
+                                $.ajax({
+                                    url: '/bills/pay',
+                                    method: 'POST',
+                                    data: {
+                                        'email': email,
+                                        'currency': currency.trim(),
+                                        'txref': 'rave-'+txref,
+                                        'business_id': business_id,
+                                        'service_id': service_id,
+                                        'duration': parseInt(duration),
+                                        'monthly': monthly,
+                                        'totalpaid': converted,
+                                        'setup': setup,
+                                        'amount': money
+                                    }
+                                }).done(function (data) {
+                                    if (data.status == 'error') {
+                                        var error_msg = '<div class="ui message message red"> \
+                                            <div class="header"> <strong> There was an error in Processing your request </strong> </div> \
+                                            <div class="text-muted"> Payment Handler </div> \
+                                            <p> The Payment wasnt successfull, Please Make sure to put corrent details </p> \
+                                        </div>';
+                                        $('.ui.modal.tiny.payment').modal('hide');
+                                        $('#error_div').html(error_msg);
+                                    } else if (data.status == 'success') {
+                                        var sub_id = data.id;
+                                        var x = getpaidSetup({
+                                            PBFPubKey: API_publicKey,
+                                            customer_email: email,
+                                            amount: converted,
+                                            currency: currency,
+                                            txref: "rave-"+txref,
+                                            onclose: function () {
+                                                window.location = '/business/view/'+business_id;
+                                            },
+                                            callback: function (response) {
+                                                var txref = response.data.txRef;
+                                                if (response.success == false) {
+                                                    var error_msg = '<div class="ui raised message red"> \
+                                                        <div class="header"> <strong> Payment Not Successful </strong> </div> \
+                                                        <div class="text-muted"> Flutterwave </div> \
+                                                        <p> The Payment wasnt successfull, Please Make sure to put current details </p> \
+                                                    </div>';
+                                                    $('#response').html(error_msg);
+                                                }
+                                                if (
+                                                    response.data.chargeResponseCode == "00" ||
+                                                    response.data.chargeResponseCode == "0"
+                                                ) {
+                                                    var link = '/{{ servicez["config_file"] }}?sub_id='+sub_id;
+                                                    var success_msg = '<div class="ui raised segment green"> \
+                                                        <strong class="bg-green text-white"> Success </strong> \
+                                                        <div class="header"> <strong> Payment Successfull </strong> </div> \
+                                                        <p> Payment from Business Name has been recieved </p> \
+                                                        <a href="'+link+'" class="ui button bg-danger text-white p-2"> View Service </a> \
+                                                    </div>';
+                                                    $('#response').html(success_msg);
+                                                    window.location = link;
+                                                } else {
+                                                    var link = '/bills/verify?sub_id='+sub_id;
+                                                    window.location = link;
+                                                }
+                                                window.location = '/business/view/'+business_id;
+                                                x.close();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        </script>
+                    {% endif %}
+                    {% if servicez['Pro'] != 0 %}
+                        <div class="ui container message positive">
+                            <a href="/service/overview/{{ set_token(servicez['Pro']) }}"> View Pro Version for Service </a>
+                        </div>
+                    {% endif %}
+                </center>
+            </p>
+        </div>
+    </div>
+    <div class="ui vertical segment mt-0 container-fluid" id="description">
+        <center> <a class="ui positive button" onclick="tidioChatApi.open();"> Inquire About Service  </a> </center> <br>
+        <div class="ui middle aligned stackable grid container">
+            <div class="row">
+                <div class="eight wide column pl-5 pt-5">
+                    <h3 class="ui header"> About Service </h3>
+                    <p> {{ servicez['Comment'] }} </p>
+                    <h3 class="ui header"> Description </h3>
+                    <p> {{ servicez['Description'] | safe }} </p>
+                </div>
+                <div class="six wide right floated column shadow">
+                    <img src="data:image/png;base64, {{ servicez['Featured_Image'] }}" height="250" width="300" class="ui large bordered rounded image">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if servicez['Details'] != 'None' %}
+        {{ servicez['Details'] | safe }}
+    {% endif %}
+    <nav class="navbar justify-content-center shadow" style="background-color: rgb(62, 62, 195);;">
+        <p class="text-white"> Copyright &copy; 2020 Appfrican </p>
+    </nav>
+{% elif page == 'category' %}
+
+{% endif %}
+
+
+{% include 'dashboard/layout/footer.html' %}

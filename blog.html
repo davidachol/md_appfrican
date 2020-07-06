@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <script>
+        ons.platform.select('android');
+        var title = 'JubaEye';
+        var url = 'https://talkofjuba.com/'
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <ons-navigator page="start.html" id="myNav"></ons-navigator>
+    <template id="start.html">
+        <ons-page>
+            <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                <button id="sidebar" class="navbar-toggler d-lg-none"> 
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand" href="#" id="title">Navbar</a>
+                <i class="fa fa-search" aria-hidden="true"></i>
+                </div>
+            </nav>
+            <div class="ui sidebar inverted vertical menu">
+                <a class="item">
+                    <i class="fa fa-home" aria-hidden="true"></i> Home 
+                </a>
+                <hr id="categories">
+            </div>
+            <div class="pusher container">
+                <div class="loading"></div>
+                <hr>
+                <div class="ui labeled input">
+                    <div class="ui label">
+                      http://
+                    </div>
+                    <input type="text" placeholder="mysite.com">
+                  </div>
+                  <hr>
+                <nav class="navbar bg-dark text-white">
+                    <a href="" class="navbar-brand text-white"> Home </a>
+                    
+                </nav>
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand" href="#">Navbar</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                  
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                      <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link disabled" href="#">Disabled</a>
+                        </li>
+                      </ul>
+                      <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                      </form>
+                    </div>
+                  </nav>
+                <hr>
+                <nav class="navbar bg-dark justify-content-end text-white">
+                    <a href="" class="navbar-brand text-white"> Home </a>
+                    <a href="" class="navbar-brand text-white"> Service </a>
+                    <a href="" class="navbar-brand text-white"> About Us </a>
+                    <button class="btn btn-primary"> Login </button>
+                </nav>
+                <div class="jumbotron bg-dark text-white mb-0">
+                    <h1 class="display-3"> Welcome to Our Site </h1>
+                    <p class="lead">Get ready to experience some shit here </p>
+                    <hr class="my-2">
+                    <p>More info</p>
+                    <p class="lead">
+                        <a class="btn btn-primary btn-lg" href="Jumbo action link" role="button">Contact Us </a>
+                    </p>
+                </div> <hr>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  
+            </div>
+            
+            <script>
+                $('#sidebar').on('click', function() {
+                    $('.ui.sidebar').sidebar('toggle');
+                });
+            </script>
+        </ons-page>
+    </template>
+    <script>
+        ons.ready(function() {
+            $('#title').html(title);
+            var cat = url+"wp-json/wp/v2/categories";
+            $.ajax({
+                url: cat
+                method: 'GET',
+                beforeSend: function() {
+                    //$('.ui.dimmer').dimmer('show');
+                },
+                complete: function() {
+                    //$('.ui.dimmer').dimmer('hide');
+                },
+                success: function(data) {
+                    console.log(data);
+                    var cats = data;
+                    $.each(cats,function(index,value) {
+                        if (value.name == 'Uncategorized') {
+                            
+                        }
+                        else {
+                            var list_item = "<a class='item'> \
+                                 "+value.name+" \
+                            </a>";
+                            $('#categories').append(list_item);
+                        }
+                    });
+                }
+            });
+            $.extend({
+                getImage: function(media_id) {
+                    var media_url = url+"wp-json/wp/v2/media/"+String(media_id);
+                    console.log(media_url);
+                    var ret;
+                    $.ajax({
+                        url: media_url,
+                        method: 'GET',
+                        dataType: 'JSON',
+                        async: false,
+                        success: function(data) {
+                            var img = data.source_url;
+                            ret = img;
+                        }
+                    });
+                    return ret;
+                }
+            });
+            $.ajax({
+                url: url+'wp-json/wp/v2/posts',
+                method: 'GET',
+                beforeSend: function() {
+                    $('.loading').html("<ons-progress-bar indeterminate></ons-progress-bar>");
+                },
+                complete: function() {
+                    $('.loading').html("");
+                },
+                success: function(data) {
+                    var nl;
+                    $.each(data, function(index, value){
+                        var date = value.date;
+                        var id = value.id;
+                        var link = value.link;
+                        var title = value.title.rendered;
+                        var media_id = value.featured_media;
+                        var media_link = $.getImage(media_id);
+                        $('.pusher').append('<div class="ui card w-100 shadow shadow"> \
+                                        <div class="image"> \
+                                            <img src="'+media_link+'" alt="'+title+'"> \
+                                        </div> \
+                                        <div class="content"> \
+                                            <a class="header"> '+title+' </a> \
+                                        </div> </div> <hr>');
+                        //
+                    });
+                    console.log(nl);
+                    $('.pusher').append(nl);
+                }
+            })
+        });
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+    "database": {
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "appfuavd_app"
+    },
+    "app_secret": "@!Another",
+    "mail": {
+        "host": "appfrican.xyz",
+        "sender": "account@appfrican.xyz",
+        "password": "#2020#account"
+    },
+    "hashing": {
+        "key" : "",
+        "auth_size": 16,
+        "salt": "this_is_the_salt"
+    },
+    "xrate": {
+        "api_key": "ed2941b6947b9fa9ec2a434310fb7877"
+    },
+    "ftp": {
+        "ftp_host": "",
+        "ftp_user": "",
+        "ftp_pass": ""
+    }
+}
